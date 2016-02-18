@@ -9,7 +9,7 @@ public class AssetLoader {
     public static Texture dolphin;
 
     public static void start() {
-        dolphin = new Texture(Gdx.files.internal("data/FatDolphinGames.png"));
+        dolphin = new Texture(Gdx.files.internal("android/assets/data/FatDolphinGames.png"));
         dolphin.setFilter(TextureFilter.Linear, Texture.TextureFilter.Linear);
     }
 
