@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class AssetLoader {
 
     public static Texture dolphin;
+    public static Texture texture;
 
     public static TextureRegion blank;
     public static TextureRegion ship;
@@ -22,6 +23,9 @@ public class AssetLoader {
     public static void start() {
         dolphin = new Texture(Gdx.files.internal("data/FatDolphinGames.png"));
         dolphin.setFilter(TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+        texture = new Texture(Gdx.files.internal("data/texture.png"));
+        texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 
         blank = new TextureRegion(dolphin, 0, 0, 0, 0);
 
