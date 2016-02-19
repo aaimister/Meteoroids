@@ -12,6 +12,9 @@ public class AssetLoader {
     public static Texture dolphin;
 
     public static TextureRegion blank;
+    public static TextureRegion ship;
+    public static TextureRegion[] stars;
+    public static TextureRegion[][] meteoroids;
 
     public static BitmapFont font;
     public static BitmapFont outline;
@@ -24,6 +27,12 @@ public class AssetLoader {
 
         font = new BitmapFont(Gdx.files.internal("data/text.fnt"));
         outline = new BitmapFont(Gdx.files.internal("data/outline.fnt"));
+
+        stars = new TextureRegion[] { new TextureRegion(texture, 138, 46, 5, 5), new TextureRegion(texture, 144, 46, 3, 3), new TextureRegion(texture, 148, 46, 1, 1) };
+
+        meteoroids = new TextureRegion[][] { { new TextureRegion(texture, 0, 0, 28, 28), new TextureRegion(texture, 29, 0, 28, 28), new TextureRegion(texture, 58, 0, 28, 28), new TextureRegion(texture, 87, 0, 28, 28) },
+                { new TextureRegion(texture, 0, 58, 20, 20), new TextureRegion(texture, 21, 58, 20, 20), new TextureRegion(texture, 42, 58, 20, 20), new TextureRegion(texture, 63, 58, 20, 20) },
+                { new TextureRegion(texture, 0, 79, 8, 8), new TextureRegion(texture, 9, 79, 8, 8), new TextureRegion(texture, 18, 79, 8, 8), new TextureRegion(texture, 27, 79, 8, 8) } };
 
     }
 

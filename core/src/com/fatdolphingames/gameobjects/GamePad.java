@@ -54,10 +54,6 @@ public class GamePad extends SpriteObject {
         // Do nothing.
     }
 
-    public void clear() {
-        setAlpha(0.0f);
-    }
-
     @Override
     public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
         Gdx.gl.glEnable(GL20.GL_BLEND);

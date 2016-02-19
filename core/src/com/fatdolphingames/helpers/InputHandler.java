@@ -58,7 +58,7 @@ public class InputHandler implements InputProcessor {
     @Override
     public boolean keyUp(int keycode) {
        // ship.stopMovement();
-        gamePad.clear();
+        gamePad.reset();
 
         return false;
     }
