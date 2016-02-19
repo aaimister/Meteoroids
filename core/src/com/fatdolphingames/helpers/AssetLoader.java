@@ -12,7 +12,7 @@ public class AssetLoader {
     public static Texture dolphin;
     public static Texture texture;
 
-    public static TextureRegion blank;
+   // public static TextureRegion blank;
     public static TextureRegion ship;
     public static TextureRegion[] stars;
     public static TextureRegion[][] meteoroids;
@@ -27,7 +27,7 @@ public class AssetLoader {
         texture = new Texture(Gdx.files.internal("data/texture.png"));
         texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 
-        blank = new TextureRegion(dolphin, 0, 0, 0, 0);
+   //     blank = new Texture();
 
         font = new BitmapFont(Gdx.files.internal("data/text.fnt"));
         outline = new BitmapFont(Gdx.files.internal("data/outline.fnt"));

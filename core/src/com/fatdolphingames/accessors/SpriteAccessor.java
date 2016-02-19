@@ -46,8 +46,7 @@ public class SpriteAccessor implements TweenAccessor<Sprite> {
                 break;
 
             case POSITION:
-                target.setX(newValues[0]);
-                target.setY(newValues[1]);
+                target.setPosition(newValues[0], newValues[1]);
                 break;
 
             case ROTATION:

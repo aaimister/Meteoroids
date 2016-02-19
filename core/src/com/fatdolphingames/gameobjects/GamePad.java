@@ -2,12 +2,11 @@ package com.fatdolphingames.gameobjects;
 
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
-import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.fatdolphingames.accessors.SpriteAccessor;
@@ -21,7 +20,7 @@ public class GamePad extends SpriteObject {
     private float gameWidth;
     private float gameHeight;
 
-    public GamePad(GameWorld world, TextureRegion texture, int x, int y, int width, int height) {
+    public GamePad(GameWorld world, Texture texture, float x, float y, int width, int height) {
         super(world, texture, x, y, width, height);
         gameWidth = world.getGameWidth();
         gameHeight = world.getGameHeight();

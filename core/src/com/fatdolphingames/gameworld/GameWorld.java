@@ -26,8 +26,8 @@ public class GameWorld {
         this.gameHeight = gameHeight;
         this.midPointY = midPointY;
 
-        ship = new Ship(this, AssetLoader.blank, (int) (gameWidth / 2.0f - 12), (int) (gameHeight - 50), 24, 23);
-        gamePad = new GamePad(this, AssetLoader.blank, (int) gameWidth, 0, 40, 100);
+        ship = new Ship(this, AssetLoader.dolphin, (int) (gameWidth / 2.0f - 12), (int) (gameHeight - 50), 24, 23);
+        gamePad = new GamePad(this, AssetLoader.dolphin, (int) gameWidth, 0, 40, 100);
         starManager = new StarManager(this);
 
     }

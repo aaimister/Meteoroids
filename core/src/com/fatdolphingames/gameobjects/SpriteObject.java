@@ -1,10 +1,10 @@
 package com.fatdolphingames.gameobjects;
 
 import aurelienribon.tweenengine.TweenManager;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fatdolphingames.gameworld.GameWorld;
 
@@ -12,8 +12,9 @@ public abstract class SpriteObject extends Sprite {
 
     protected GameWorld world;
 
-    public SpriteObject(GameWorld world, TextureRegion texture, int x, int y, int width, int height) {
-        super(texture, x, y, width, height);
+    public SpriteObject(GameWorld world, Texture texture, float x, float y, int width, int height) {
+        super(texture, 0, 0, width, height);
+        setPosition(x, y);
         this.world = world;
     };
 

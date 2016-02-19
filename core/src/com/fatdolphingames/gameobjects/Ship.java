@@ -1,14 +1,14 @@
 package com.fatdolphingames.gameobjects;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fatdolphingames.gameworld.GameWorld;
 
 public class Ship extends SpriteObject {
 
-    public Ship(GameWorld world, TextureRegion texture, int x, int y, int width, int height) {
+    public Ship(GameWorld world, Texture texture, float x, float y, int width, int height) {
         super(world, texture, x, y, width, height);
 
     }

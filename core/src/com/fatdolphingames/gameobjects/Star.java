@@ -1,9 +1,9 @@
 package com.fatdolphingames.gameobjects;
 
 import aurelienribon.tweenengine.*;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fatdolphingames.accessors.SpriteAccessor;
 import com.fatdolphingames.gameworld.GameWorld;
@@ -23,7 +23,7 @@ public class Star extends SpriteObject {
     private float gameHeight;
     private float duration;
 
-    public Star(GameWorld world, TextureRegion texture, int x, int y, int width, int height) {
+    public Star(GameWorld world, Texture texture, float x, float y, int width, int height) {
         super(world, texture, x, y, width, height);
         rand = new Random();
         gameWidth = world.getGameWidth();
@@ -53,16 +53,15 @@ public class Star extends SpriteObject {
 
     private void randomize() {
         setAlpha(0.0f);
-        setX(rand.nextInt((int) (gameWidth - getWidth() + 1)));
-        setY(rand.nextInt((int) (gameHeight - getWidth() + 1)));
+        setPosition(rand.nextInt((int) (gameWidth - getWidth() + 1)), rand.nextInt((int) (gameHeight - getWidth() + 1)));
         life = System.currentTimeMillis() + rand.nextInt(10001) + 2500;
         duration = (gameHeight - getY()) / 7.0f + rand.nextFloat();
-        duration = life < duration ? life : duration;
-        setRegion(AssetLoader.stars[rand.nextInt(3)]);
+        duration = life < duration ? life : duration - 3.0f < 0 ? 0 : duration;
+        size = sizes[rand.nextInt(sizes.length)];
         Timeline.createParallel().beginParallel()
-                .push(Tween.to(this, SpriteAccessor.ALPHA, 3.0f).target(1.0f).ease(TweenEquations.easeOutQuad))
+                .push(Tween.to(this, SpriteAccessor.ALPHA, 3.0f).target(rand.nextFloat()).ease(TweenEquations.easeOutQuad))
                 .push(Timeline.createSequence().beginSequence()
-                    .push(Tween.to(this, SpriteAccessor.POSITION, duration).target(getX(), gameHeight + 1).ease(TweenEquations.easeOutQuad))
+                    .push(Tween.to(this, SpriteAccessor.POSITION, duration).target(getX(), duration > 0 ? gameHeight + 1 : getY()).ease(TweenEquations.easeNone))
                     .push(Tween.to(this, SpriteAccessor.ALPHA, 3.0f).target(0.0f).ease(TweenEquations.easeOutQuad))
                     .end())
                 .setCallback(new TweenCallback() {
@@ -78,7 +77,7 @@ public class Star extends SpriteObject {
         batcher.begin();
 
         batcher.setColor(1.0f, 1.0f, 1.0f, getColor().a);
-        batcher.draw(getTexture(), getX(), getY());
+        batcher.draw(AssetLoader.stars[size == 5 ? 0 : size == 3 ? 1 : 2], getX(), getY());
 
         batcher.end();
     }
