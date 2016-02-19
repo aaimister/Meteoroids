@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fatdolphingames.gameworld.GameWorld;
-import com.fatdolphingames.helpers.AssetLoader;
 
 public class StarManager {
 
@@ -48,7 +47,7 @@ public class StarManager {
         Star[] stars = new Star[count];
 
         for (int i = 0; i < count; i++) {
-            stars[i] = new Star(world, AssetLoader.dolphin, 0, 0, 5, 5);
+            stars[i] = new Star(world, 0, 0, 0, 0);
         }
 
         return stars;

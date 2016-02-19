@@ -1,7 +1,6 @@
 package com.fatdolphingames.gameobjects;
 
 import aurelienribon.tweenengine.*;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -17,14 +16,14 @@ public class Star extends SpriteObject {
 
     private Random rand;
 
-    private long life;
     private int size;
     private float gameWidth;
     private float gameHeight;
     private float duration;
+    private float life;
 
-    public Star(GameWorld world, Texture texture, float x, float y, int width, int height) {
-        super(world, texture, x, y, width, height);
+    public Star(GameWorld world, float x, float y, int width, int height) {
+        super(world, x, y, width, height);
         rand = new Random();
         gameWidth = world.getGameWidth();
         gameHeight = world.getGameHeight();
@@ -53,17 +52,15 @@ public class Star extends SpriteObject {
 
     private void randomize() {
         setAlpha(0.0f);
-        setPosition(rand.nextInt((int) (gameWidth - getWidth() + 1)), rand.nextInt((int) (gameHeight - getWidth() + 1)));
-        life = System.currentTimeMillis() + rand.nextInt(10001) + 2500;
+        setPosition(rand.nextInt((int) (gameWidth - getWidth() + 1)), rand.nextInt((int) (gameHeight - getHeight() - 25 + 1)));
+        life = rand.nextInt(11) + 4.0f;
         duration = (gameHeight - getY()) / 7.0f + rand.nextFloat();
-        duration = life < duration ? life : duration - 3.0f < 0 ? 0 : duration;
+        duration = duration - life < 0 ? 4.0f : duration - life;
         size = sizes[rand.nextInt(sizes.length)];
-        Timeline.createParallel().beginParallel()
+        Timeline.createParallel()
                 .push(Tween.to(this, SpriteAccessor.ALPHA, 3.0f).target(rand.nextFloat()).ease(TweenEquations.easeOutQuad))
-                .push(Timeline.createSequence().beginSequence()
-                    .push(Tween.to(this, SpriteAccessor.POSITION, duration).target(getX(), duration > 0 ? gameHeight + 1 : getY()).ease(TweenEquations.easeNone))
-                    .push(Tween.to(this, SpriteAccessor.ALPHA, 3.0f).target(0.0f).ease(TweenEquations.easeOutQuad))
-                    .end())
+                .push(Tween.to(this, SpriteAccessor.POSITION, duration).target(getX(), gameHeight).ease(TweenEquations.easeNone))
+                .push(Tween.to(this, SpriteAccessor.ALPHA, 1.0f).target(0.0f).ease(TweenEquations.easeOutQuad).delay(duration - 1.0f))
                 .setCallback(new TweenCallback() {
                     @Override
                     public void onEvent(int type, BaseTween<?> source) {

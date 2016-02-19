@@ -4,7 +4,6 @@ import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -20,8 +19,8 @@ public class GamePad extends SpriteObject {
     private float gameWidth;
     private float gameHeight;
 
-    public GamePad(GameWorld world, Texture texture, float x, float y, int width, int height) {
-        super(world, texture, x, y, width, height);
+    public GamePad(GameWorld world, float x, float y, int width, int height) {
+        super(world, x, y, width, height);
         gameWidth = world.getGameWidth();
         gameHeight = world.getGameHeight();
 

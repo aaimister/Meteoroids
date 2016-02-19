@@ -12,9 +12,9 @@ public abstract class SpriteObject extends Sprite {
 
     protected GameWorld world;
 
-    public SpriteObject(GameWorld world, Texture texture, float x, float y, int width, int height) {
-        super(texture, 0, 0, width, height);
-        setPosition(x, y);
+    public SpriteObject(GameWorld world, float x, float y, int width, int height) {
+        super();
+        setBounds(x, y, width, height);
         this.world = world;
     };
 

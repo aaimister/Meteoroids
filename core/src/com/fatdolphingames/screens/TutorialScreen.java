@@ -23,6 +23,7 @@ public class TutorialScreen implements Screen {
 
         gameWidth = 136.0f;
         gameHeight = ((float) Gdx.graphics.getHeight()) / (((float) Gdx.graphics.getWidth()) / gameWidth);
+        midPointY = gameHeight / 2.0f;
 
         batcher = new SpriteBatch();
     }

@@ -8,8 +8,8 @@ import com.fatdolphingames.gameworld.GameWorld;
 
 public class Ship extends SpriteObject {
 
-    public Ship(GameWorld world, Texture texture, float x, float y, int width, int height) {
-        super(world, texture, x, y, width, height);
+    public Ship(GameWorld world, float x, float y, int width, int height) {
+        super(world, x, y, width, height);
 
     }
 
