@@ -5,11 +5,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.fatdolphingames.gameworld.GameWorld;
 
-public class Ship extends Sprite implements SpriteObject {
+public class Ship extends SpriteObject {
 
-    public Ship(TextureRegion texture, int x, int y, int width, int height) {
-        super(texture, x, y, width, height);
+    public Ship(GameWorld world, TextureRegion texture, int x, int y, int width, int height) {
+        super(world, texture, x, y, width, height);
+
     }
 
     @Override
@@ -33,7 +35,7 @@ public class Ship extends Sprite implements SpriteObject {
     }
 
     @Override
-    public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTIme) {
+    public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
 
     }
 }

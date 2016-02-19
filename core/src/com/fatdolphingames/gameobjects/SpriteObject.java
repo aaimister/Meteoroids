@@ -1,19 +1,34 @@
 package com.fatdolphingames.gameobjects;
 
+import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.fatdolphingames.gameworld.GameWorld;
 
-public interface SpriteObject {
+public abstract class SpriteObject extends Sprite {
 
-    public void update(float delta);
+    protected GameWorld world;
 
-    public void reset();
+    public SpriteObject(GameWorld world, TextureRegion texture, int x, int y, int width, int height) {
+        super(texture, x, y, width, height);
+        this.world = world;
+    };
 
-    public void onTouch(float touchX, float touchY);
+    public abstract void update(float delta);
 
-    public void collidedWith(SpriteObject so);
+    public abstract void reset();
 
-    public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTIme);
+    public abstract void onTouch(float touchX, float touchY);
+
+    public abstract void collidedWith(SpriteObject so);
+
+    public abstract void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime);
+
+    public TweenManager getTweenManager() {
+        return world.getTweenManager();
+    }
 
 }

@@ -1,9 +1,11 @@
 package com.fatdolphingames.screens;
 
 import aurelienribon.tweenengine.TweenManager;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.fatdolphingames.gameworld.GameRenderer;
 import com.fatdolphingames.gameworld.GameWorld;
+import com.fatdolphingames.helpers.InputHandler;
 
 public class GameScreen implements Screen {
 
@@ -18,7 +20,7 @@ public class GameScreen implements Screen {
         world = new GameWorld(tweenManager, gameWidth, gameHeight, midPointY);
         renderer = new GameRenderer(world);
 
-      //  Gdx.input.setInputProcessor();
+        Gdx.input.setInputProcessor(new InputHandler(world, renderer.getCamera()));
     }
 
     @Override

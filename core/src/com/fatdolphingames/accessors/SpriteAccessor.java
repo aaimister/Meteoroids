@@ -42,7 +42,7 @@ public class SpriteAccessor implements TweenAccessor<Sprite> {
     public void setValues(Sprite target, int tweenType, float[] newValues) {
         switch (tweenType) {
             case ALPHA:
-                target.setColor(target.getColor().r, target.getColor().g, target.getColor().b, newValues[0]);
+                target.setAlpha(newValues[0]);
                 break;
 
             case POSITION:
