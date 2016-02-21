@@ -27,9 +27,15 @@ public class StarManager {
         }
     }
 
-    public void onTouch(float touchX, float touchY) {
+    public void touchDown(float screenX, float screenY, int pointer) {
         for (Star s : stars) {
-            s.onTouch(touchX, touchY);
+            s.touchDown(screenX, screenY, pointer);
+        }
+    }
+
+    public void touchUp(float screenX, float screenY, int pointer) {
+        for (Star s : stars) {
+            s.touchUp(screenX, screenY, pointer);
         }
     }
 

@@ -23,7 +23,9 @@ public abstract class SpriteObject extends Sprite {
 
     public abstract void reset();
 
-    public abstract void onTouch(float touchX, float touchY);
+    public abstract void touchDown(float screenX, float screenY, int pointer);
+
+    public abstract void touchUp(float screenX, float screenY, int pointer);
 
     public abstract void collidedWith(SpriteObject so);
 

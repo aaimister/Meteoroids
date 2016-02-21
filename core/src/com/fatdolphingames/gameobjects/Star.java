@@ -42,9 +42,15 @@ public class Star extends SpriteObject {
     }
 
     @Override
-    public void onTouch(float touchX, float touchY) {
+    public void touchDown(float screenX, float screenY, int pointer) {
         // Do nothing.
     }
+
+    @Override
+    public void touchUp(float screenX, float screenY, int pointer) {
+        // Do nothing.
+    }
+
 
     @Override
     public void collidedWith(SpriteObject so) {
@@ -59,9 +65,9 @@ public class Star extends SpriteObject {
         duration = duration - life < 0 ? 4.0f : duration - life;
         size = sizes[rand.nextInt(sizes.length)];
         Timeline.createParallel()
-                .push(Tween.to(this, SpriteAccessor.ALPHA, 3.0f).target(rand.nextFloat()).ease(TweenEquations.easeOutQuad))
+                .push(Tween.to(this, SpriteAccessor.ALPHA, 3.0f).target(rand.nextFloat()).ease(TweenEquations.easeInOutQuad))
                 .push(Tween.to(this, SpriteAccessor.POSITION, duration).target(getX(), gameHeight).ease(TweenEquations.easeNone))
-                .push(Tween.to(this, SpriteAccessor.ALPHA, 1.0f).target(0.0f).ease(TweenEquations.easeOutQuad).delay(duration - 1.0f))
+                .push(Tween.to(this, SpriteAccessor.ALPHA, 1.0f).target(0.0f).ease(TweenEquations.easeInOutQuad).delay(duration - 1.0f))
                 .setCallback(new TweenCallback() {
                     @Override
                     public void onEvent(int type, BaseTween<?> source) {

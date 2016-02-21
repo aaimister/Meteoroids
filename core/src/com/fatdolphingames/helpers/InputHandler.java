@@ -1,11 +1,9 @@
 package com.fatdolphingames.helpers;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.fatdolphingames.gameobjects.GamePad;
 import com.fatdolphingames.gameobjects.Ship;
 import com.fatdolphingames.gameworld.GameWorld;
 
@@ -13,7 +11,6 @@ public class InputHandler implements InputProcessor {
 
     private GameWorld world;
     private Ship ship;
-    private GamePad gamePad;
 
     private int dragCount;
     private int fingers;
@@ -32,18 +29,16 @@ public class InputHandler implements InputProcessor {
         scaleX = ((float) Gdx.graphics.getWidth()) / cam.viewportWidth;
         scaleY = ((float) Gdx.graphics.getHeight()) / cam.viewportHeight;
         ship = world.getShip();
-        gamePad = world.getGamePad();
         doublePressTime = 10;
     }
 
     @Override
     public boolean keyDown(int keycode) {
+        fingers++;
         if (keycode == Keys.LEFT) {
-            ship.onTouch(0, 0);
-            gamePad.onTouch(0, 0);
+            world.touchDown(0, 0, fingers);
         } else if (keycode == Keys.RIGHT) {
-            ship.onTouch(136, 0);
-            gamePad.onTouch(136, 0);
+            world.touchDown(136, 0, fingers);
         }
 
      /*   if (keycode == Keys.UP)
@@ -57,8 +52,12 @@ public class InputHandler implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-       // ship.stopMovement();
-        gamePad.reset();
+        fingers--;
+        if (keycode == Keys.LEFT) {
+            world.touchUp(0, 0, fingers);
+        } else if (keycode == Keys.RIGHT) {
+            world.touchUp(136, 0, fingers);
+        }
 
         return false;
     }

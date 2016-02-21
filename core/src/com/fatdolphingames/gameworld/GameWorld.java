@@ -4,7 +4,7 @@ import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.fatdolphingames.gameobjects.GamePad;
+import com.fatdolphingames.gameobjects.PadManager;
 import com.fatdolphingames.gameobjects.Ship;
 import com.fatdolphingames.gameobjects.StarManager;
 
@@ -12,7 +12,7 @@ public class GameWorld {
 
     private TweenManager tweenManager;
     private Ship ship;
-    private GamePad gamePad;
+    private PadManager padManager;
     private StarManager starManager;
 
     private float gameWidth;
@@ -26,7 +26,7 @@ public class GameWorld {
         this.midPointY = midPointY;
 
         ship = new Ship(this, gameWidth / 2.0f - 12, gameHeight - 50, 24, 23);
-        gamePad = new GamePad(this, gameWidth, 0, 40, 100);
+        padManager = new PadManager(this, gameWidth, gameHeight, 50, 100);
         starManager = new StarManager(this);
 
     }
@@ -38,22 +38,28 @@ public class GameWorld {
         starManager.update(delta);
     }
 
-    public void onTouch(float touchX, float touchY) {
-        ship.onTouch(touchX, touchY);
-        gamePad.onTouch(touchX, touchY);
-        starManager.onTouch(touchX, touchY);
+    public void touchDown(float screenX, float screenY, int pointer) {
+        ship.touchDown(screenX, screenY, pointer);
+        padManager.touchDown(screenX, screenY, pointer);
+        starManager.touchDown(screenX, screenY, pointer);
+    }
+
+    public void touchUp(float screenX, float screenY, int pointer) {
+        ship.touchUp(screenX, screenY, pointer);
+        padManager.touchUp(screenX, screenY, pointer);
+        starManager.touchUp(screenX, screenY, pointer);
     }
 
     public void reset() {
         ship.reset();
-        gamePad.reset();
+        padManager.reset();
         starManager.reset();
     }
 
     public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
-        ship.draw(batcher, shapeRenderer, font, outline, runTime);
-        gamePad.draw(batcher, shapeRenderer, font, outline, runTime);
+        padManager.draw(batcher, shapeRenderer, font, outline, runTime);
         starManager.draw(batcher, shapeRenderer, font, outline, runTime);
+        ship.draw(batcher, shapeRenderer, font, outline, runTime);
     }
 
     public float getGameWidth() {
@@ -76,8 +82,8 @@ public class GameWorld {
         return ship;
     }
 
-    public GamePad getGamePad() {
-        return gamePad;
+    public PadManager getPadManager() {
+        return padManager;
     }
 
     public StarManager getStarManager() {
