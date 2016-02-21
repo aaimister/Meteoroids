@@ -30,7 +30,8 @@ public class SpriteAccessor implements TweenAccessor<Sprite> {
                 returnValues[0] = target.getColor().r;
                 returnValues[1] = target.getColor().g;
                 returnValues[2] = target.getColor().b;
-                return 3;
+                returnValues[3] = target.getColor().a;
+                return 4;
 
             default:
                 assert false;
@@ -54,7 +55,7 @@ public class SpriteAccessor implements TweenAccessor<Sprite> {
                 break;
 
             case COLOR:
-                target.setColor(newValues[0], newValues[1], newValues[2], target.getColor().a);
+                target.setColor(newValues[0], newValues[1], newValues[2], newValues[3]);
                 break;
 
             default:

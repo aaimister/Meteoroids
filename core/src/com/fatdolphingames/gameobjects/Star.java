@@ -37,6 +37,7 @@ public class Star extends SpriteObject {
 
     @Override
     public void reset() {
+       tweenManager.killTarget(this);
         randomize();
     }
 
@@ -66,7 +67,7 @@ public class Star extends SpriteObject {
                     public void onEvent(int type, BaseTween<?> source) {
                         randomize();
                     }
-                }).start(getTweenManager());
+                }).start(tweenManager);
     }
 
     @Override

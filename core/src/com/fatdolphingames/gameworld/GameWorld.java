@@ -32,6 +32,7 @@ public class GameWorld {
     }
 
     public void update(float delta) {
+    //    System.out.println(tweenManager.getRunningTweensCount());
         tweenManager.update(delta);
         ship.update(delta);
         starManager.update(delta);

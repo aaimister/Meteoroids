@@ -34,6 +34,7 @@ public class GamePad extends SpriteObject {
 
     @Override
     public void reset() {
+        tweenManager.killTarget(this);
         setAlpha(0.0f);
     }
 
@@ -44,7 +45,7 @@ public class GamePad extends SpriteObject {
         if (changed != left)
             setAlpha(0.0f);
 
-        Tween.to(this, SpriteAccessor.ALPHA, 0.2f).target(1.0f).ease(TweenEquations.easeInOutQuad).start(getTweenManager());
+        Tween.to(this, SpriteAccessor.ALPHA, 0.2f).target(1.0f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
     }
 
     @Override

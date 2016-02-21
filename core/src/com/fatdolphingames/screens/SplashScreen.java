@@ -31,7 +31,7 @@ public class SplashScreen implements Screen {
         height = (float) Gdx.graphics.getHeight();
         scale = width / sprite.getWidth();
 
-        sprite.setSize(sprite.getWidth() * scale, sprite.getHeight() * scale);
+        sprite.setScale(scale, scale);
         sprite.setPosition((width / 2.0f) - (sprite.getWidth() / 2.0f), (height / 2.0f) - (sprite.getHeight() / 2.0f));
 
         setupTween();
@@ -44,11 +44,9 @@ public class SplashScreen implements Screen {
         Tween.to(sprite, SpriteAccessor.ALPHA, 0.8f).target(1.0f).ease(TweenEquations.easeInOutQuad).repeatYoyo(1, 0.4f).setCallback(new TweenCallback() {
             @Override
             public void onEvent(int type, BaseTween<?> source) {
-                tweenManager.killAll();
-                SplashScreen.this.game.setScreen(new LoadScreen(SplashScreen.this.game, SplashScreen.this.tweenManager,
-                        SplashScreen.this.batcher, SplashScreen.this.width, SplashScreen.this.height));
+                endScreen();
             }
-        }).setCallbackTriggers(8).start(tweenManager);
+        }).start(tweenManager);
     }
 
     @Override
@@ -57,16 +55,19 @@ public class SplashScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         tweenManager.update(delta);
+
         batcher.begin();
-
         sprite.draw(batcher);
-
         batcher.end();
 
         if (Gdx.input.justTouched()) {
-            tweenManager.killAll();
-            SplashScreen.this.game.setScreen(new LoadScreen(game, tweenManager, batcher, width, height));
+           endScreen();
         }
+    }
+
+    private void endScreen() {
+        tweenManager.killAll();
+        game.setScreen(new LoadScreen(game, tweenManager, batcher, width, height, scale));
     }
 
     @Override

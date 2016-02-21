@@ -10,9 +10,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class AssetLoader {
 
     public static Texture dolphin;
+    public static Texture[] loadingScreen;
     public static Texture texture;
 
-   // public static TextureRegion blank;
     public static TextureRegion ship;
     public static TextureRegion[] stars;
     public static TextureRegion[][] meteoroids;
@@ -24,10 +24,11 @@ public class AssetLoader {
         dolphin = new Texture(Gdx.files.internal("data/FatDolphinGames.png"));
         dolphin.setFilter(TextureFilter.Linear, Texture.TextureFilter.Linear);
 
+        loadingScreen = new Texture[] { new Texture(Gdx.files.internal("data/Meteoroids.png")), new Texture(Gdx.files.internal("data/Meteor.png")),
+            new Texture(Gdx.files.internal("data/o.png")) };
+
         texture = new Texture(Gdx.files.internal("data/texture.png"));
         texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-
-   //     blank = new Texture();
 
         font = new BitmapFont(Gdx.files.internal("data/text.fnt"));
         outline = new BitmapFont(Gdx.files.internal("data/outline.fnt"));
@@ -46,6 +47,11 @@ public class AssetLoader {
 
     public static void dispose() {
         dolphin.dispose();
+        for (Texture t : loadingScreen)
+            t.dispose();
+        texture.dispose();
+        font.dispose();
+        outline.dispose();
     }
 
 }
