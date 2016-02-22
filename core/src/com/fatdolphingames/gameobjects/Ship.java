@@ -1,6 +1,8 @@
 package com.fatdolphingames.gameobjects;
 
+import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -12,7 +14,14 @@ import com.fatdolphingames.gameworld.GameWorld;
 
 public class Ship extends SpriteObject {
 
+    private ChargeBar chargeBar;
+
     private boolean dead;
+    private boolean dodge;
+    private boolean sideRoll;
+
+    private long sideRollTime;
+    private long sideRollTimer;
 
     private float gameWidth;
     private float fingerX[];
@@ -22,8 +31,10 @@ public class Ship extends SpriteObject {
     public Ship(GameWorld world, float x, float y, int width, int height) {
         super(world, x, y, width, height);
         gameWidth = world.getGameWidth();
-        fingerX = new float[] { -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f };
+        fingerX = new float[]{-1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f};
         fullWidth = width;
+        chargeBar = new ChargeBar(world, gameWidth - 35.0f, world.getGameHeight() - 15, 24, 4, 15, 6000);
+        sideRollTime = 180;
     }
 
     @Override
@@ -33,17 +44,31 @@ public class Ship extends SpriteObject {
 
     @Override
     public void reset() {
+        tweenManager.killTarget(this);
         dead = false;
+        chargeBar.reset();
     }
 
     @Override
     public void touchDown(float screenX, float screenY, int pointer) {
         if (!dead) {
+            if (pointer > 1 && chargeBar.dodge()) {
+                Tween.to(this, SpriteAccessor.SCALE, 0.5f).target(0.5f, 0.5f).ease(TweenEquations.easeInOutQuad).repeatYoyo(1, 1.0f).start(tweenManager);
+            }
+            chargeBar.updateTimer();
+
+            float speed = (sideRoll = (pointer == 1 && System.currentTimeMillis() <= sideRollTimer)) ? 200.0f : 100.0f;
             screenX = screenX <= gameWidth / 2.0f ? 0.0f : gameWidth - fullWidth;
             fingerX[pointer - 1] = screenX;
 
             stopMovement();
-            Tween.to(this, SpriteAccessor.POSITION, calcDistance(screenX, getY()) / 100).target(screenX, getY()).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+            Tween.to(this, SpriteAccessor.POSITION, calcDistance(screenX, getY()) / speed).target(screenX, getY()).ease(TweenEquations.easeInOutQuad).setCallback(new TweenCallback() {
+                @Override
+                public void onEvent(int type, BaseTween<?> source) {
+                    sideRoll = false;
+                }
+            }).start(tweenManager);
+            sideRollTimer = System.currentTimeMillis() + sideRollTime;
         }
     }
 
@@ -59,7 +84,9 @@ public class Ship extends SpriteObject {
                 fingerX[pointer] = -1.0f;
             }
         } else {
-            stopMovement();
+            if (!sideRoll) {
+                stopMovement();
+            }
         }
     }
 
@@ -73,7 +100,9 @@ public class Ship extends SpriteObject {
 
     @Override
     public void collidedWith(SpriteObject so) {
+        if (!dead && dodge) {
 
+        }
     }
 
     @Override
@@ -81,8 +110,9 @@ public class Ship extends SpriteObject {
 
         shapeRenderer.begin(ShapeType.Filled);
         shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(getX(), getY(), getWidth(), getHeight());
+        shapeRenderer.rect(getX() + (getWidth() - getWidth() * getScaleX()) / 2.0f, getY() + (getHeight() - getHeight() * getScaleY()) / 2.0f, getWidth() * getScaleX(), getHeight() * getScaleY());
         shapeRenderer.end();
 
+        chargeBar.draw(batcher, shapeRenderer, font, outline, runTime);
     }
 }

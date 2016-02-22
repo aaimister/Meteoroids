@@ -15,9 +15,6 @@ public class InputHandler implements InputProcessor {
     private int dragCount;
     private int fingers;
 
-    private long doublePressTime;
-    private long doublePressTimer;
-
     private float scaleX;
     private float scaleY;
     private float startX;
@@ -29,7 +26,6 @@ public class InputHandler implements InputProcessor {
         scaleX = ((float) Gdx.graphics.getWidth()) / cam.viewportWidth;
         scaleY = ((float) Gdx.graphics.getHeight()) / cam.viewportHeight;
         ship = world.getShip();
-        doublePressTime = 10;
     }
 
     @Override

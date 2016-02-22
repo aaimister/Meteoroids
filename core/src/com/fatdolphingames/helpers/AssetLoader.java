@@ -16,6 +16,8 @@ public class AssetLoader {
     public static TextureRegion ship;
     public static TextureRegion[] stars;
     public static TextureRegion[][] meteoroids;
+    public static TextureRegion chargeBar;
+    public static TextureRegion chargeBarSquare[];
 
     public static BitmapFont font;
     public static BitmapFont outline;
@@ -39,6 +41,8 @@ public class AssetLoader {
                 { new TextureRegion(texture, 0, 58, 20, 20), new TextureRegion(texture, 21, 58, 20, 20), new TextureRegion(texture, 42, 58, 20, 20), new TextureRegion(texture, 63, 58, 20, 20) },
                 { new TextureRegion(texture, 0, 79, 8, 8), new TextureRegion(texture, 9, 79, 8, 8), new TextureRegion(texture, 18, 79, 8, 8), new TextureRegion(texture, 27, 79, 8, 8) } };
 
+        chargeBar = new TextureRegion(texture, 84, 63, 24, 4);
+        chargeBarSquare = new TextureRegion[] { new TextureRegion(texture, 84, 58, 4, 4), new TextureRegion(texture, 89, 58, 4, 4) };
     }
 
     public static Color getColor(float r, float g, float b, float a) {
