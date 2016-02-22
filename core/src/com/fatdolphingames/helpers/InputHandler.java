@@ -66,11 +66,19 @@ public class InputHandler implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        screenX = (int) (((float) screenX) / scaleX);
+        screenY = (int) (((float) screenY) / scaleY);
+        fingers++;
+        world.touchDown(screenX, screenY, fingers);
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        screenX = (int) (((float) screenX) / scaleX);
+        screenY = (int) (((float) screenY) / scaleY);
+        fingers = fingers - 1 >= 0 ? fingers - 1 : 0;
+        world.touchUp(screenX, screenY, fingers);
         return false;
     }
 

@@ -1,5 +1,6 @@
 package com.fatdolphingames.gameobjects;
 
+import aurelienribon.tweenengine.Timeline;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.gdx.graphics.Color;
@@ -59,7 +60,7 @@ public class ChargeBar {
             dodging = true;
             rechargeTimer = System.currentTimeMillis() + rechargeTime;
             for (int i = 0; i < squares.length; i++) {
-                squares[i].charge(rechargeTime / 6000.0f * i);
+                squares[i].charge(i);
             }
             return true;
         }
@@ -119,9 +120,13 @@ public class ChargeBar {
             // Do nothing.
         }
 
-        public void charge(float delay) {
-            setAlpha(1.0f);
-            Tween.to(this, SpriteAccessor.ALPHA, rechargeTime).target(0.0f).ease(TweenEquations.easeInOutQuad).delay(delay).start(tweenManager);
+        public void charge(int chargeNum) {
+            Timeline.createSequence()
+                    .pushPause(rechargeTime / 6.0f * (squares.length - chargeNum))
+                    .push(Tween.to(this, SpriteAccessor.ALPHA, rechargeTime / 6.0f).target(1.0f).ease(TweenEquations.easeInOutQuad))
+                    .pushPause(rechargeTime * chargeNum)
+                    .push(Tween.to(this, SpriteAccessor.ALPHA, rechargeTime).target(0.0f).ease(TweenEquations.easeInOutQuad))
+                    .start(tweenManager);
         }
 
         @Override

@@ -34,7 +34,7 @@ public class Ship extends SpriteObject {
         fingerX = new float[]{-1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f};
         fullWidth = width;
         chargeBar = new ChargeBar(world, gameWidth - 35.0f, world.getGameHeight() - 15, 24, 4, 15, 6000);
-        sideRollTime = 180;
+        sideRollTime = 200;
     }
 
     @Override
