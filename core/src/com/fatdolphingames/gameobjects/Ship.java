@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.fatdolphingames.accessors.SpriteAccessor;
 import com.fatdolphingames.gameworld.GameWorld;
+import com.fatdolphingames.helpers.AssetLoader;
 
 public class Ship extends SpriteObject {
 
@@ -112,6 +113,11 @@ public class Ship extends SpriteObject {
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.rect(getX() + (getWidth() - getWidth() * getScaleX()) / 2.0f, getY() + (getHeight() - getHeight() * getScaleY()) / 2.0f, getWidth() * getScaleX(), getHeight() * getScaleY());
         shapeRenderer.end();
+
+        batcher.begin();
+        batcher.setColor(Color.WHITE);
+        batcher.draw(AssetLoader.meteoroids[0][0], getX(), getY());
+        batcher.end();
 
         chargeBar.draw(batcher, shapeRenderer, font, outline, runTime);
     }
