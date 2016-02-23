@@ -4,11 +4,14 @@ import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Circle;
 import com.fatdolphingames.accessors.SpriteAccessor;
 import com.fatdolphingames.gameworld.GameWorld;
 import com.fatdolphingames.helpers.AssetLoader;
@@ -18,7 +21,6 @@ public class Ship extends SpriteObject {
     private ChargeBar chargeBar;
 
     private boolean dead;
-    private boolean dodge;
     private boolean sideRoll;
 
     private long sideRollTime;
@@ -34,13 +36,13 @@ public class Ship extends SpriteObject {
         gameWidth = world.getGameWidth();
         fingerX = new float[]{-1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f};
         fullWidth = width;
-        chargeBar = new ChargeBar(world, gameWidth - 35.0f, world.getGameHeight() - 15, 24, 4, 15, 6000);
+        chargeBar = new ChargeBar(world, gameWidth - 35.0f, world.getGameHeight() - 15, 24, 4, 2000, 15, 6000);
         sideRollTime = 200;
     }
 
     @Override
     public void update(float delta) {
-
+        // Do nothing.
     }
 
     @Override
@@ -101,7 +103,7 @@ public class Ship extends SpriteObject {
 
     @Override
     public void collidedWith(SpriteObject so) {
-        if (!dead && dodge) {
+        if (!dead && !chargeBar.isDodging()) {
 
         }
     }
@@ -114,10 +116,21 @@ public class Ship extends SpriteObject {
         shapeRenderer.rect(getX() + (getWidth() - getWidth() * getScaleX()) / 2.0f, getY() + (getHeight() - getHeight() * getScaleY()) / 2.0f, getWidth() * getScaleX(), getHeight() * getScaleY());
         shapeRenderer.end();
 
-        batcher.begin();
-        batcher.setColor(Color.WHITE);
-        batcher.draw(AssetLoader.meteoroids[0][0], getX(), getY());
-        batcher.end();
+        shapeRenderer.begin(ShapeType.Line);
+        shapeRenderer.setColor(Color.BLACK);
+        shapeRenderer.rect(getX() + (getWidth() - getWidth() * getScaleX()) / 2.0f, getY() + (getHeight() - getHeight() * getScaleY()) / 2.0f, getWidth() * getScaleX(), getHeight() * getScaleY());
+        shapeRenderer.end();
+
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 0.5f);
+        Circle cbounds = getBoundingCircle();
+        shapeRenderer.circle(cbounds.x + (getWidth() - getWidth() * getScaleX()) / 2.0f, cbounds.y + (getHeight() - getHeight() * getScaleY()) / 2.0f, cbounds.radius);
+        shapeRenderer.end();
+
+        Gdx.gl.glDisable(GL20.GL_BLEND);
 
         chargeBar.draw(batcher, shapeRenderer, font, outline, runTime);
     }

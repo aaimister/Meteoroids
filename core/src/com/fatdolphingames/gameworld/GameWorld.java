@@ -4,6 +4,7 @@ import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.fatdolphingames.gameobjects.MeteorManager;
 import com.fatdolphingames.gameobjects.PadManager;
 import com.fatdolphingames.gameobjects.Ship;
 import com.fatdolphingames.gameobjects.StarManager;
@@ -14,6 +15,7 @@ public class GameWorld {
     private Ship ship;
     private PadManager padManager;
     private StarManager starManager;
+    private MeteorManager meteorManager;
 
     private float gameWidth;
     private float gameHeight;
@@ -28,7 +30,7 @@ public class GameWorld {
         ship = new Ship(this, gameWidth / 2.0f - 12, gameHeight - 50, 24, 23);
         padManager = new PadManager(this, gameWidth, gameHeight, 50, 100);
         starManager = new StarManager(this);
-
+        meteorManager = new MeteorManager(this, 1);
     }
 
     public void update(float delta) {
@@ -36,6 +38,7 @@ public class GameWorld {
         tweenManager.update(delta);
         ship.update(delta);
         starManager.update(delta);
+        meteorManager.update(delta);
     }
 
     public void touchDown(float screenX, float screenY, int pointer) {
@@ -54,11 +57,13 @@ public class GameWorld {
         ship.reset();
         padManager.reset();
         starManager.reset();
+        meteorManager.reset();
     }
 
     public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
-        padManager.draw(batcher, shapeRenderer, font, outline, runTime);
         starManager.draw(batcher, shapeRenderer, font, outline, runTime);
+        padManager.draw(batcher, shapeRenderer, font, outline, runTime);
+        meteorManager.draw(batcher, shapeRenderer, font, outline, runTime);
         ship.draw(batcher, shapeRenderer, font, outline, runTime);
     }
 

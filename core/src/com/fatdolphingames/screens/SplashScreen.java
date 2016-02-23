@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.fatdolphingames.accessors.SpriteAccessor;
+import com.fatdolphingames.accessors.SpriteObjectAccessor;
+import com.fatdolphingames.gameobjects.SpriteObject;
 import com.fatdolphingames.helpers.AssetLoader;
 import com.fatdolphingames.meteoroids.MGame;
 
@@ -42,6 +44,7 @@ public class SplashScreen implements Screen {
         tweenManager = new TweenManager();
         Tween.setCombinedAttributesLimit(4);
         Tween.registerAccessor(Sprite.class, new SpriteAccessor());
+        Tween.registerAccessor(SpriteObject.class, new SpriteObjectAccessor());
         Timeline.createParallel()
                 .push(Tween.to(dolphin, SpriteAccessor.ALPHA, 0.8f).target(1.0f).ease(TweenEquations.easeInOutQuad).repeatYoyo(1, 0.4f))
                 .push(Tween.to(dolphin, SpriteAccessor.COLOR, 0.8f).target(0.0f, 0.0f, 0.0f, 0.0f).ease(TweenEquations.easeInOutQuad).delay(1.2f))

@@ -45,7 +45,7 @@ public class Pad extends SpriteObject {
         if (draw && !(left ? screenX <= gameWidth / 2.0f : screenX > gameWidth / 2.0f)) {
             setAlpha(0.0f);
         } else if (draw = left ? screenX <= gameWidth / 2.0f : screenX > gameWidth / 2.0f) {
-            Tween.to(this, SpriteAccessor.ALPHA, 0.2f).target(1.0f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+            Tween.to(this, SpriteAccessor.ALPHA, 0.2f).target(0.5f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
         }
     }
 
@@ -56,7 +56,7 @@ public class Pad extends SpriteObject {
             draw = false;
             setAlpha(0.0f);
         } else {
-            Tween.to(this, SpriteAccessor.ALPHA, 0.2f).target(1.0f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+            Tween.to(this, SpriteAccessor.ALPHA, 0.2f).target(0.5f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
         }
     }
 

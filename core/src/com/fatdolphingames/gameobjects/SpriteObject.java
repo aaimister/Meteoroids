@@ -4,16 +4,23 @@ import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.fatdolphingames.gameworld.GameWorld;
 
 public abstract class SpriteObject extends Sprite {
 
     protected TweenManager tweenManager;
     protected GameWorld world;
+    protected Circle bounds;
+
+    protected float rotation;
 
     public SpriteObject(GameWorld world, float x, float y, int width, int height) {
         super();
+        bounds = new Circle();
         setBounds(x, y, width, height);
         this.tweenManager = world.getTweenManager();
         this.world = world;
@@ -30,5 +37,21 @@ public abstract class SpriteObject extends Sprite {
     public abstract void collidedWith(SpriteObject so);
 
     public abstract void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime);
+
+    public Circle getBoundingCircle() {
+        Rectangle rec = getBoundingRectangle();
+        bounds.x = rec.x + (rec.width / 2.0f);
+        bounds.y = rec.y + (rec.height / 2.0f);
+        bounds.radius = rec.width / 2.0f;
+        return bounds;
+    }
+
+    public float getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(float rotation) {
+        this.rotation = rotation;
+    }
 
 }

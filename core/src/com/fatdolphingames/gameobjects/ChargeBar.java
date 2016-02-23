@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Timer;
 import com.fatdolphingames.accessors.SpriteAccessor;
 import com.fatdolphingames.gameworld.GameWorld;
 import com.fatdolphingames.helpers.AssetLoader;
@@ -15,25 +16,30 @@ public class ChargeBar {
 
     private ChargeSquare[] squares;
 
+    private Timer timer;
+    private Timer.Task dodgeTask;
+
     private boolean dodging;
 
     private float x;
     private float y;
+    private float dodgeTime;
 
-    private long dodgeTime;
     private long dodgeTimer;
     private long rechargeTime;
     private long rechargeTimer;
+    private long touchInterval;
 
     private int width;
     private int height;
 
-    public ChargeBar(GameWorld world, float x, float y, int width, int height, long dodgeTime, long rechargeTime) {
+    public ChargeBar(GameWorld world, float x, float y, int width, int height, long dodgeTime, long touchInterval, long rechargeTime) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.dodgeTime = dodgeTime;
+        this.dodgeTime = dodgeTime / 1000.0f;
+        this.touchInterval = touchInterval;
         this.rechargeTime = rechargeTime;
         float squareChargeTime = rechargeTime / 6000.0f;
         width = width / 6;
@@ -43,21 +49,31 @@ public class ChargeBar {
             new ChargeSquare(world, x + width * 3, y, width, height, squareChargeTime),
             new ChargeSquare(world, x + width * 4, y, width, height, squareChargeTime),
             new ChargeSquare(world, x + width * 5, y, width, height, squareChargeTime) };
+
+        timer = new Timer();
+        dodgeTask = new Timer.Task() {
+            @Override
+            public void run() {
+                dodging = false;
+            }
+        };
     }
 
     public void reset() {
+        dodging = false;
         for (ChargeSquare cs : squares) {
             cs.reset();
         }
     }
 
     public void updateTimer() {
-        dodgeTimer = System.currentTimeMillis() + dodgeTime;
+        dodgeTimer = System.currentTimeMillis() + touchInterval;
     }
 
     public boolean dodge() {
         if (System.currentTimeMillis() >= rechargeTimer && System.currentTimeMillis() <= dodgeTimer) {
             dodging = true;
+            timer.schedule(dodgeTask, dodgeTime);
             rechargeTimer = System.currentTimeMillis() + rechargeTime;
             for (int i = 0; i < squares.length; i++) {
                 squares[i].charge(i);
@@ -67,7 +83,7 @@ public class ChargeBar {
         return false;
     }
 
-    public boolean getDodging() {
+    public boolean isDodging() {
         return dodging;
     }
 
@@ -121,6 +137,7 @@ public class ChargeBar {
         }
 
         public void charge(int chargeNum) {
+            System.out.println("CHARGE!");
             Timeline.createSequence()
                     .pushPause(rechargeTime / 6.0f * (squares.length - chargeNum))
                     .push(Tween.to(this, SpriteAccessor.ALPHA, rechargeTime / 6.0f).target(1.0f).ease(TweenEquations.easeInOutQuad))
