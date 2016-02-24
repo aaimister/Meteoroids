@@ -29,7 +29,7 @@ public class MeteorManager {
     }
 
     public void update(float delta) {
-        screenBox.updateBoxes(meteors);
+        //screenBox.updateBoxes(meteors);
         for (Meteor m : meteors) {
             if (m.isOffScreen()) {
                 fireMeteor(m);
@@ -44,7 +44,7 @@ public class MeteorManager {
     }
 
     public void fireMeteor(Meteor m) {
-        float x = screenBox.getRandomX(m.getWidth());
+        float x = screenBox.fireMeteor(m);
         if (x != -1) {
             m.fire(x);
         }

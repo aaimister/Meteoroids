@@ -30,7 +30,7 @@ public class GameWorld {
         ship = new Ship(this, gameWidth / 2.0f - 12, gameHeight - 50, 24, 23);
         padManager = new PadManager(this, gameWidth, gameHeight, 50, 100);
         starManager = new StarManager(this);
-        meteorManager = new MeteorManager(this, 9);
+        meteorManager = new MeteorManager(this, 50);
     }
 
     public void update(float delta) {
