@@ -6,16 +6,17 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType ;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
-import com.fatdolphingames.gameworld.GameWorld;
+import com.fatdolphingames.gameobjects.Meteor;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class ScreenBox {
 
     private Random rand;
-    private Box[][] boxes;
+    private Box[] boxes;
 
     private float gameWidth;
     private float gameHeight;
@@ -24,6 +25,7 @@ public class ScreenBox {
 
     private int widthBoxCount;
     private int widthBoxSize;
+    private int midPointY;
     private int heightBoxCount;
     private int heightBoxSize;
 
@@ -31,39 +33,64 @@ public class ScreenBox {
         rand = new Random();
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
+        midPointY = Math.round(gameHeight / 2);
         widthBoxCount = (int) Math.floor(gameWidth / boxSize);
         widthBoxSize = (int) Math.floor(gameWidth / widthBoxCount);
         widthSpaceOffset = (gameWidth - (widthBoxSize * widthBoxCount)) / (widthBoxCount - 1);
 
-        heightBoxCount = (int) Math.floor(gameHeight / boxSize);
-        heightBoxSize = (int) Math.floor(gameHeight / heightBoxCount);
-        heightSpaceOffset = (gameHeight - (heightBoxSize * heightBoxCount)) / (heightBoxCount - 1);
+//        heightBoxCount = (int) Math.floor(midPointY / boxSize);
+//        heightBoxSize = (int) Math.floor(gameHeight / (heightBoxCount * 2));
+//        heightSpaceOffset = (gameHeight - (heightBoxSize * heightBoxCount * 2)) / (heightBoxCount * 2 - 1);
 
-        boxes = new Box[widthBoxCount][heightBoxCount];
-        for (int w = 0; w < widthBoxCount; w++) {
-            for (int h = 0; h < heightBoxCount; h++) {
-                boxes[w][h] = new Box(0 + ((widthBoxSize + widthSpaceOffset) * w), 0 + ((heightBoxSize + heightSpaceOffset) * h), widthBoxSize, heightBoxSize);
+        boxes = new Box[widthBoxCount];
+        for (int i = 0; i < widthBoxCount; i++) {
+            boxes[i] = new Box(0 + ((widthBoxSize + widthSpaceOffset) * i), 0, widthBoxSize, midPointY);
+        }
+    }
+
+    public void updateBoxes(Meteor[] meteors) {
+        ArrayList<Box> clear = new ArrayList<Box>(widthBoxCount);
+        for (Box b : boxes) {
+            b.clear();
+            clear.add(b);
+        }
+        for (int i = 0; i < meteors.length && clear.size() > 0; i++) {
+            if (!meteors[i].isOffScreen() && meteors[i].getY() <= midPointY) {
+                Box remove = null;
+                for (Box b : clear) {
+                    if (b.contains(meteors[i].getX())) {
+                        remove = b;
+                        break;
+                    }
+                }
+                if (remove != null) {
+                    clear.remove(remove);
+                }
             }
         }
     }
 
     public float getRandomX(float width) {
-        return boxes[rand.nextInt(widthBoxCount)][0].x + ((widthBoxSize - width) / 2.0f);
+        ArrayList<Integer> open = getOpenColumns();
+        if (open.size() <= 1) {
+            return -1;
+        }
+        return boxes[open.get(rand.nextInt(open.size()))].x + ((widthBoxSize - width) / 2.0f);
     }
 
-    public void checkBoxes(Rectangle rec) {
-        for (Box w[] : boxes) {
-            for (Box h : w) {
-                h.contains(rec);
+    private ArrayList<Integer> getOpenColumns() {
+        ArrayList<Integer> open = new ArrayList<Integer>();
+        for (int i = 0; i < widthBoxCount; i++) {
+            if (boxes[i].isClear()) {
+                open.add(i);
             }
         }
+        return open;
     }
 
     public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
-        for (Box w[] : boxes) {
-            for (Box h : w) {
-                h.draw(batcher, shapeRenderer, font, outline, runTime);
-            }
+        for (Box b : boxes) {
+            b.draw(batcher, shapeRenderer, font, outline, runTime);
         }
     }
 
@@ -73,7 +100,7 @@ public class ScreenBox {
         private Color green;
         private Color red;
 
-        private boolean contains;
+        private boolean clear;
 
         private float x;
         private float y;
@@ -91,8 +118,17 @@ public class ScreenBox {
             this.height = height;
         }
 
-        public boolean contains(Rectangle rec) {
-            return (contains = bounds.overlaps(rec));
+        public boolean contains(float x) {
+            clear = !(x >= this.x && x <= this.x + width);
+            return !clear;
+        }
+
+        public void clear() {
+            clear = true;
+        }
+
+        public boolean isClear() {
+            return clear;
         }
 
         public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
@@ -100,7 +136,7 @@ public class ScreenBox {
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
             shapeRenderer.begin(ShapeType.Filled);
-            shapeRenderer.setColor(contains ? red : green);
+            shapeRenderer.setColor(clear ? green : red);
             shapeRenderer.rect(x, y, width, height);
             shapeRenderer.end();
 

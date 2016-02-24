@@ -29,11 +29,10 @@ public class MeteorManager {
     }
 
     public void update(float delta) {
+        screenBox.updateBoxes(meteors);
         for (Meteor m : meteors) {
             if (m.isOffScreen()) {
                 fireMeteor(m);
-            } else {
-                screenBox.checkBoxes(m.getBoundingRectangle());
             }
         }
     }
@@ -45,7 +44,10 @@ public class MeteorManager {
     }
 
     public void fireMeteor(Meteor m) {
-        m.fire(screenBox.getRandomX(m.getWidth()));
+        float x = screenBox.getRandomX(m.getWidth());
+        if (x != -1) {
+            m.fire(x);
+        }
     }
 
     public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {

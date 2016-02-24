@@ -20,7 +20,6 @@ public abstract class SpriteObject extends Sprite {
 
     public SpriteObject(GameWorld world, float x, float y, int width, int height) {
         super();
-        bounds = new Circle();
         setBounds(x, y, width, height);
         this.tweenManager = world.getTweenManager();
         this.world = world;
@@ -39,10 +38,13 @@ public abstract class SpriteObject extends Sprite {
     public abstract void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime);
 
     public Circle getBoundingCircle() {
-        Rectangle rec = getBoundingRectangle();
-        bounds.x = rec.x + (rec.width / 2.0f);
-        bounds.y = rec.y + (rec.height / 2.0f);
-        bounds.radius = rec.width / 2.0f;
+        if (bounds == null) {
+            bounds = new Circle();
+        }
+        float width = getWidth();
+        bounds.x = getX() + (width / 2.0f);
+        bounds.y = getY() + (getHeight() / 2.0f);
+        bounds.radius = width / 2.0f;
         return bounds;
     }
 
