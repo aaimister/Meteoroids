@@ -137,13 +137,12 @@ public class ChargeBar {
         }
 
         public void charge(int chargeNum) {
-            System.out.println("CHARGE!");
             Timeline.createSequence()
-                    .pushPause(rechargeTime / 6.0f * (squares.length - chargeNum))
-                    .push(Tween.to(this, SpriteAccessor.ALPHA, rechargeTime / 6.0f).target(1.0f).ease(TweenEquations.easeInOutQuad))
-                    .pushPause(rechargeTime * chargeNum)
-                    .push(Tween.to(this, SpriteAccessor.ALPHA, rechargeTime).target(0.0f).ease(TweenEquations.easeInOutQuad))
-                    .start(tweenManager);
+                .pushPause(rechargeTime / 6.0f * (squares.length - chargeNum))
+                .push(Tween.to(this, SpriteAccessor.ALPHA, rechargeTime / 6.0f).target(1.0f).ease(TweenEquations.easeInOutQuad))
+                .pushPause(rechargeTime * chargeNum)
+                .push(Tween.to(this, SpriteAccessor.ALPHA, rechargeTime).target(0.0f).ease(TweenEquations.easeInOutQuad))
+                .start(tweenManager);
         }
 
         @Override

@@ -1,9 +1,6 @@
 package com.fatdolphingames.gameobjects;
 
-import aurelienribon.tweenengine.BaseTween;
-import aurelienribon.tweenengine.Tween;
-import aurelienribon.tweenengine.TweenCallback;
-import aurelienribon.tweenengine.TweenEquations;
+import aurelienribon.tweenengine.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -22,6 +19,7 @@ public class Ship extends SpriteObject {
 
     private boolean dead;
     private boolean sideRoll;
+    private boolean teleporting;
 
     private long sideRollTime;
     private long sideRollTimer;
@@ -36,8 +34,8 @@ public class Ship extends SpriteObject {
         gameWidth = world.getGameWidth();
         fingerX = new float[]{-1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f};
         fullWidth = width;
-        chargeBar = new ChargeBar(world, gameWidth - 35.0f, world.getGameHeight() - 15, 24, 4, 2000, 15, 6000);
-        sideRollTime = 200;
+        chargeBar = new ChargeBar(world, gameWidth - 35.0f, world.getGameHeight() - 15, 24, 4, 2000, 20, 6000);
+        sideRollTime = 215;
     }
 
     @Override
@@ -54,13 +52,25 @@ public class Ship extends SpriteObject {
 
     @Override
     public void touchDown(float screenX, float screenY, int pointer) {
-        if (!dead) {
+        if (!dead && !teleporting) {
             if (pointer > 1 && chargeBar.dodge()) {
                 Tween.to(this, SpriteAccessor.SCALE, 0.5f).target(0.5f, 0.5f).ease(TweenEquations.easeInOutQuad).repeatYoyo(1, 1.0f).start(tweenManager);
             }
             chargeBar.updateTimer();
 
-            float speed = (sideRoll = (pointer == 1 && System.currentTimeMillis() <= sideRollTimer)) ? 200.0f : 100.0f;
+            float speed = 100.0f;
+            sideRoll = false;
+            if (pointer == 1 && System.currentTimeMillis() <= sideRollTimer) {
+                float x = getX();
+                if (x == 0 || x == (gameWidth - fullWidth)) {
+                    teleport(x == 0);
+                    return;
+                } else {
+                    speed = 200.0f;
+                    sideRoll = true;
+                }
+            }
+
             screenX = screenX <= gameWidth / 2.0f ? 0.0f : gameWidth - fullWidth;
             fingerX[pointer - 1] = screenX;
 
@@ -93,8 +103,36 @@ public class Ship extends SpriteObject {
         }
     }
 
+    private void teleport(final boolean left) {
+        teleporting = true;
+        Timeline.createSequence()
+                .beginParallel()
+                .push(Tween.to(this, SpriteAccessor.ALPHA, 0.2f).target(0.0f).ease(TweenEquations.easeInOutQuad))
+                .push(Tween.to(this, SpriteAccessor.POSITION, 0.2f).target(left ? -fullWidth : gameWidth, getY()).ease(TweenEquations.easeInOutQuad)
+                        .setCallback(new TweenCallback() {
+                            @Override
+                            public void onEvent(int type, BaseTween<?> source) {
+                                setX(left ? gameWidth : -fullWidth);
+                            }
+                        }))
+                .end()
+                .beginParallel()
+                .push(Tween.to(this, SpriteAccessor.ALPHA, 0.2f).target(1.0f).ease(TweenEquations.easeInOutQuad))
+                .push(Tween.to(this, SpriteAccessor.POSITION, 0.2f).target(left ? gameWidth - fullWidth : 0.0f, getY()).ease(TweenEquations.easeInOutQuad))
+                .end()
+                .setCallback(new TweenCallback() {
+                    @Override
+                    public void onEvent(int type, BaseTween<?> source) {
+                        teleporting = false;
+                    }
+                })
+                .start(tweenManager);
+    }
+
     public void stopMovement() {
-        tweenManager.killTarget(this, SpriteAccessor.POSITION);
+        if (!teleporting) {
+            tweenManager.killTarget(this, SpriteAccessor.POSITION);
+        }
     }
 
     private float calcDistance(float newX, float newY) {
@@ -110,19 +148,18 @@ public class Ship extends SpriteObject {
 
     @Override
     public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
         shapeRenderer.begin(ShapeType.Filled);
-        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.setColor(1.0f, 0.0f, 0.0f, getColor().a);
         shapeRenderer.rect(getX() + (getWidth() - getWidth() * getScaleX()) / 2.0f, getY() + (getHeight() - getHeight() * getScaleY()) / 2.0f, getWidth() * getScaleX(), getHeight() * getScaleY());
         shapeRenderer.end();
 
         shapeRenderer.begin(ShapeType.Line);
-        shapeRenderer.setColor(Color.BLACK);
+        shapeRenderer.setColor(0.0f, 0.0f, 0.0f, getColor().a);
         shapeRenderer.rect(getX() + (getWidth() - getWidth() * getScaleX()) / 2.0f, getY() + (getHeight() - getHeight() * getScaleY()) / 2.0f, getWidth() * getScaleX(), getHeight() * getScaleY());
         shapeRenderer.end();
-
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 0.5f);
