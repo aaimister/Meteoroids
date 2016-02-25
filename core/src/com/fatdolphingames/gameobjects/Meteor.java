@@ -35,7 +35,7 @@ public class Meteor extends SpriteObject {
     public Meteor(GameWorld world, float x, float y, int width, int height) {
         super(world, x, y, width, height);
         rand = new Random();
-        size = width == 28 ? 2 : width == 20 ? 1 : 0;
+        size = width == 28 ? 0 : width == 20 ? 1 : 2;
         gameHeight = world.getGameHeight();
         offScreen = true;
         setOriginCenter();
@@ -97,15 +97,9 @@ public class Meteor extends SpriteObject {
     public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
         batcher.begin();
         batcher.setColor(Color.WHITE);
-        batcher.draw(AssetLoader.meteoroids[0][0], getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+        batcher.draw(AssetLoader.meteoroids[size][textureType], getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
        // batcher.draw(AssetLoader.meteoroids[0][0], getX(), getY());
         batcher.end();
-
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.BLACK);
-        Rectangle bounds = getBoundingRectangle();
-        shapeRenderer.rect(bounds.x, bounds.y, bounds.width, bounds.height);
-        shapeRenderer.end();
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -113,7 +107,7 @@ public class Meteor extends SpriteObject {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(0.0f, 0.0f, 1.0f, 0.2f);
         Circle cbounds = getBoundingCircle();
-        shapeRenderer.circle(cbounds.x, cbounds.y, cbounds.radius);
+    //    shapeRenderer.circle(cbounds.x, cbounds.y, cbounds.radius);
         shapeRenderer.end();
 
         Gdx.gl.glDisable(GL20.GL_BLEND);

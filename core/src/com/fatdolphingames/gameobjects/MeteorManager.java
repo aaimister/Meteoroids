@@ -1,5 +1,6 @@
 package com.fatdolphingames.gameobjects;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -11,12 +12,14 @@ import java.util.Random;
 public class MeteorManager {
 
     private Random rand;
+    private GameWorld world;
     private ScreenBox screenBox;
     private Meteor[] meteors;
 
     private float gameWidth;
 
     public MeteorManager(GameWorld world, int meteorCount) {
+        this.world = world;
         rand = new Random();
         meteors = new Meteor[meteorCount];
         gameWidth = world.getGameWidth();
@@ -29,7 +32,7 @@ public class MeteorManager {
     }
 
     public void update(float delta) {
-        //screenBox.updateBoxes(meteors);
+        world.checkShipCollisions(meteors);
         for (Meteor m : meteors) {
             if (m.isOffScreen()) {
                 fireMeteor(m);

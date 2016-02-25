@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -12,12 +13,18 @@ public class AssetLoader {
     public static Texture dolphin;
     public static Texture[] loadingScreen;
     public static Texture texture;
+    public static Texture ships;
 
     public static TextureRegion ship;
+    public static TextureRegion[] thruster;
+    public static TextureRegion[] explosion;
     public static TextureRegion[] stars;
     public static TextureRegion[][] meteoroids;
     public static TextureRegion chargeBar;
     public static TextureRegion chargeBarSquare[];
+
+    public static Animation thrusters;
+    public static Animation explosions;
 
     public static BitmapFont font;
     public static BitmapFont outline;
@@ -32,6 +39,9 @@ public class AssetLoader {
         texture = new Texture(Gdx.files.internal("data/texture.png"));
         texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 
+        ships = new Texture(Gdx.files.internal("data/ships.png"));
+        ships.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+
         font = new BitmapFont(Gdx.files.internal("data/text.fnt"));
         outline = new BitmapFont(Gdx.files.internal("data/outline.fnt"));
 
@@ -43,10 +53,32 @@ public class AssetLoader {
 
         chargeBar = new TextureRegion(texture, 84, 63, 24, 4);
         chargeBarSquare = new TextureRegion[] { new TextureRegion(texture, 84, 58, 4, 4), new TextureRegion(texture, 89, 58, 4, 4) };
+
+        ship = new TextureRegion(ships, 0, 0, 24, 23);
+        ship.flip(false, true);
+
+        thruster = new TextureRegion[] { new TextureRegion(ships, 50, 0, 24, 23), new TextureRegion(ships, 100, 0, 24, 23), new TextureRegion(ships, 150, 0, 24, 23), new TextureRegion(ships, 200, 0, 24, 23) };
+        flip(thruster, false, true);
+
+        thrusters = new Animation(0.1f, thruster);
+        thrusters.setPlayMode(Animation.PlayMode.LOOP);
+
+        explosion = new TextureRegion[] { new TextureRegion(ships, 250, 0, 24, 23), new TextureRegion(ships, 300, 0, 24, 23), new TextureRegion(ships, 350, 0, 24, 23), new TextureRegion(ships, 350, 0, 24, 23),
+                new TextureRegion(ships, 400, 0, 24, 23), new TextureRegion(ships, 450, 0, 24, 23), new TextureRegion(ships, 500, 0, 24, 23), new TextureRegion(ships, 550, 0, 24, 23) };
+        flip(explosion, false, true);
+
+        explosions = new Animation(0.1f, explosion);
+        explosions.setPlayMode(Animation.PlayMode.NORMAL);
     }
 
     public static Color getColor(float r, float g, float b, float a) {
         return new Color(r / 255.0f, g / 255.0f, b / 255.0f, a);
+    }
+
+    private static void flip(TextureRegion[] texture, boolean x, boolean y) {
+        for (TextureRegion tr : texture) {
+            tr.flip(x, y);
+        }
     }
 
     public static void dispose() {
@@ -54,6 +86,7 @@ public class AssetLoader {
         for (Texture t : loadingScreen)
             t.dispose();
         texture.dispose();
+        ships.dispose();
         font.dispose();
         outline.dispose();
     }

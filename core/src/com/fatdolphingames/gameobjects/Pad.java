@@ -25,7 +25,7 @@ public class Pad extends SpriteObject {
 
         this.left = left;
 
-        setColor(AssetLoader.getColor(29.0f, 29.0f, 29.0f, 0.0f));
+        setColor(AssetLoader.getColor(46.0f, 46.0f, 46.0f, 0.0f));
     }
 
     @Override

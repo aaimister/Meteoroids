@@ -20,12 +20,15 @@ public class Ship extends SpriteObject {
     private boolean dead;
     private boolean sideRoll;
     private boolean teleporting;
+    private boolean updateExplotionTime;
 
     private long sideRollTime;
     private long sideRollTimer;
 
     private float gameWidth;
     private float fingerX[];
+    private float lastScreenX;
+    private float explosionTime;
 
     private int fullWidth;
 
@@ -53,6 +56,8 @@ public class Ship extends SpriteObject {
     @Override
     public void touchDown(float screenX, float screenY, int pointer) {
         if (!dead && !teleporting) {
+            screenX = screenX <= gameWidth / 2.0f ? 0.0f : gameWidth - fullWidth;
+
             if (pointer > 1 && chargeBar.dodge()) {
                 Tween.to(this, SpriteAccessor.SCALE, 0.5f).target(0.5f, 0.5f).ease(TweenEquations.easeInOutQuad).repeatYoyo(1, 1.0f).start(tweenManager);
             }
@@ -60,7 +65,7 @@ public class Ship extends SpriteObject {
 
             float speed = 100.0f;
             sideRoll = false;
-            if (pointer == 1 && System.currentTimeMillis() <= sideRollTimer) {
+            if (pointer == 1 && screenX == lastScreenX && System.currentTimeMillis() <= sideRollTimer) {
                 float x = getX();
                 if (x == 0 || x == (gameWidth - fullWidth)) {
                     teleport(x == 0);
@@ -71,7 +76,7 @@ public class Ship extends SpriteObject {
                 }
             }
 
-            screenX = screenX <= gameWidth / 2.0f ? 0.0f : gameWidth - fullWidth;
+            lastScreenX = screenX;
             fingerX[pointer - 1] = screenX;
 
             stopMovement();
@@ -87,18 +92,20 @@ public class Ship extends SpriteObject {
 
     @Override
     public void touchUp(float screenX, float screenY, int pointer) {
-        if (pointer > 0) {
-            screenX = screenX <= gameWidth / 2.0f ? 0.0f : gameWidth - fullWidth;
-            if (fingerX[pointer] == screenX) {
-                stopMovement();
-                Tween.to(this, SpriteAccessor.POSITION, calcDistance(fingerX[pointer - 1], getY()) / 100).target(fingerX[pointer - 1], getY()).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+        if (!dead) {
+            if (pointer > 0) {
+                screenX = screenX <= gameWidth / 2.0f ? 0.0f : gameWidth - fullWidth;
+                if (fingerX[pointer] == screenX) {
+                    stopMovement();
+                    Tween.to(this, SpriteAccessor.POSITION, calcDistance(fingerX[pointer - 1], getY()) / 100).target(fingerX[pointer - 1], getY()).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+                } else {
+                    fingerX[pointer - 1] = fingerX[pointer];
+                    fingerX[pointer] = -1.0f;
+                }
             } else {
-                fingerX[pointer - 1] = fingerX[pointer];
-                fingerX[pointer] = -1.0f;
-            }
-        } else {
-            if (!sideRoll) {
-                stopMovement();
+                if (!sideRoll) {
+                    stopMovement();
+                }
             }
         }
     }
@@ -141,34 +148,59 @@ public class Ship extends SpriteObject {
 
     @Override
     public void collidedWith(SpriteObject so) {
-        if (!dead && !chargeBar.isDodging()) {
-
+        if (!dead && !chargeBar.isDodging() && getBoundingCircle().overlaps(so.getBoundingCircle())) {
+            System.out.println("Dead!");
+            dead = true;
+            stopMovement();
+            updateExplotionTime = true;
         }
+    }
+
+    public boolean isAlive() {
+        return !dead;
+    }
+
+    public void drawChargeBar(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
+        chargeBar.draw(batcher, shapeRenderer, font, outline, runTime);
     }
 
     @Override
     public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
-        shapeRenderer.begin(ShapeType.Filled);
-        shapeRenderer.setColor(1.0f, 0.0f, 0.0f, getColor().a);
-        shapeRenderer.rect(getX() + (getWidth() - getWidth() * getScaleX()) / 2.0f, getY() + (getHeight() - getHeight() * getScaleY()) / 2.0f, getWidth() * getScaleX(), getHeight() * getScaleY());
-        shapeRenderer.end();
-
-        shapeRenderer.begin(ShapeType.Line);
-        shapeRenderer.setColor(0.0f, 0.0f, 0.0f, getColor().a);
-        shapeRenderer.rect(getX() + (getWidth() - getWidth() * getScaleX()) / 2.0f, getY() + (getHeight() - getHeight() * getScaleY()) / 2.0f, getWidth() * getScaleX(), getHeight() * getScaleY());
-        shapeRenderer.end();
-
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 0.5f);
-        Circle cbounds = getBoundingCircle();
-        shapeRenderer.circle(cbounds.x + (getWidth() - getWidth() * getScaleX()) / 2.0f, cbounds.y + (getHeight() - getHeight() * getScaleY()) / 2.0f, cbounds.radius);
-        shapeRenderer.end();
-
-        Gdx.gl.glDisable(GL20.GL_BLEND);
-
-        chargeBar.draw(batcher, shapeRenderer, font, outline, runTime);
+        if (!dead) {
+            batcher.begin();
+            batcher.setColor(Color.WHITE);
+            batcher.draw(AssetLoader.ship, getX(), getY(), getWidth() / 2, getHeight() / 2, getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+            batcher.draw(AssetLoader.thrusters.getKeyFrame(runTime), getX(), getY() + (21.0f * getScaleY()), getWidth() / 2, getHeight() / 2, getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+            batcher.end();
+        } else {
+            if (updateExplotionTime) {
+                explosionTime = runTime;
+                updateExplotionTime = false;
+            }
+            batcher.begin();
+            batcher.setColor(Color.WHITE);
+            batcher.draw(AssetLoader.explosions.getKeyFrame(runTime - explosionTime), getX(), getY());
+            batcher.end();
+        }
+//        Gdx.gl.glEnable(GL20.GL_BLEND);
+//        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+//
+//        shapeRenderer.begin(ShapeType.Filled);
+//        shapeRenderer.setColor(1.0f, 0.0f, 0.0f, getColor().a);
+//        shapeRenderer.rect(getX() + (getWidth() - getWidth() * getScaleX()) / 2.0f, getY() + (getHeight() - getHeight() * getScaleY()) / 2.0f, getWidth() * getScaleX(), getHeight() * getScaleY());
+//        shapeRenderer.end();
+//
+//        shapeRenderer.begin(ShapeType.Line);
+//        shapeRenderer.setColor(0.0f, 0.0f, 0.0f, getColor().a);
+//        shapeRenderer.rect(getX() + (getWidth() - getWidth() * getScaleX()) / 2.0f, getY() + (getHeight() - getHeight() * getScaleY()) / 2.0f, getWidth() * getScaleX(), getHeight() * getScaleY());
+//        shapeRenderer.end();
+//
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+//        shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 0.5f);
+//        Circle cbounds = getBoundingCircle();
+//        shapeRenderer.circle(cbounds.x + (getWidth() - getWidth() * getScaleX()) / 2.0f, cbounds.y + (getHeight() - getHeight() * getScaleY()) / 2.0f, cbounds.radius);
+//        shapeRenderer.end();
+//
+//        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 }

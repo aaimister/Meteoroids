@@ -4,10 +4,7 @@ import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.fatdolphingames.gameobjects.MeteorManager;
-import com.fatdolphingames.gameobjects.PadManager;
-import com.fatdolphingames.gameobjects.Ship;
-import com.fatdolphingames.gameobjects.StarManager;
+import com.fatdolphingames.gameobjects.*;
 
 public class GameWorld {
 
@@ -42,9 +39,13 @@ public class GameWorld {
     }
 
     public void touchDown(float screenX, float screenY, int pointer) {
-        ship.touchDown(screenX, screenY, pointer);
-        padManager.touchDown(screenX, screenY, pointer);
-        starManager.touchDown(screenX, screenY, pointer);
+        if (ship.isAlive()) {
+            ship.touchDown(screenX, screenY, pointer);
+            padManager.touchDown(screenX, screenY, pointer);
+            starManager.touchDown(screenX, screenY, pointer);
+        } else {
+            reset();
+        }
     }
 
     public void touchUp(float screenX, float screenY, int pointer) {
@@ -56,15 +57,22 @@ public class GameWorld {
     public void reset() {
         ship.reset();
         padManager.reset();
-        starManager.reset();
+    //    starManager.reset();
         meteorManager.reset();
+    }
+
+    public void checkShipCollisions(Meteor[] meteors) {
+        for (Meteor m : meteors) {
+            ship.collidedWith(m);
+        }
     }
 
     public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
         starManager.draw(batcher, shapeRenderer, font, outline, runTime);
         padManager.draw(batcher, shapeRenderer, font, outline, runTime);
-        meteorManager.draw(batcher, shapeRenderer, font, outline, runTime);
         ship.draw(batcher, shapeRenderer, font, outline, runTime);
+        meteorManager.draw(batcher, shapeRenderer, font, outline, runTime);
+        ship.drawChargeBar(batcher, shapeRenderer, font, outline, runTime);
     }
 
     public float getGameWidth() {

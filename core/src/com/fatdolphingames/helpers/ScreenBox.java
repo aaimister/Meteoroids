@@ -54,7 +54,7 @@ public class ScreenBox {
         int fireColumn = open.get(rand.nextInt(open.size()));
         inColumn[fireColumn] = m;
         boxes[fireColumn].setClear(false);
-        return boxes[fireColumn].x + ((widthBoxSize - m.getWidth()) / 2.0f);
+        return boxes[fireColumn].x + (rand.nextInt((int) (widthBoxSize - m.getWidth())));
     }
 
     private int getNextColumn() {
@@ -121,20 +121,21 @@ public class ScreenBox {
         }
 
         public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
-            Gdx.gl.glEnable(GL20.GL_BLEND);
-            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
-            shapeRenderer.begin(ShapeType.Filled);
-            shapeRenderer.setColor(clear ? green : red);
-            shapeRenderer.rect(x, y, width, height);
-            shapeRenderer.end();
-
-            shapeRenderer.begin(ShapeType.Line);
-            shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 0.2f);
-            shapeRenderer.rect(x, y, width, height);
-            shapeRenderer.end();
-
-            Gdx.gl.glDisable(GL20.GL_BLEND);
+            // Debug Purposes
+//            Gdx.gl.glEnable(GL20.GL_BLEND);
+//            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+//
+//            shapeRenderer.begin(ShapeType.Filled);
+//            shapeRenderer.setColor(clear ? green : red);
+//            shapeRenderer.rect(x, y, width, height);
+//            shapeRenderer.end();
+//
+//            shapeRenderer.begin(ShapeType.Line);
+//            shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 0.2f);
+//            shapeRenderer.rect(x, y, width, height);
+//            shapeRenderer.end();
+//
+//            Gdx.gl.glDisable(GL20.GL_BLEND);
         }
 
     }
