@@ -20,7 +20,6 @@ public class Ship extends SpriteObject {
     private boolean dead;
     private boolean sideRoll;
     private boolean teleporting;
-    private boolean updateExplotionTime;
 
     private long sideRollTime;
     private long sideRollTimer;
@@ -28,7 +27,6 @@ public class Ship extends SpriteObject {
     private float gameWidth;
     private float fingerX[];
     private float lastScreenX;
-    private float explosionTime;
 
     private int fullWidth;
 
@@ -149,10 +147,9 @@ public class Ship extends SpriteObject {
     @Override
     public void collidedWith(SpriteObject so) {
         if (!dead && !chargeBar.isDodging() && getBoundingCircle().overlaps(so.getBoundingCircle())) {
-            System.out.println("Dead!");
             dead = true;
             stopMovement();
-            updateExplotionTime = true;
+            AssetLoader.explosion().play();
         }
     }
 
@@ -169,17 +166,13 @@ public class Ship extends SpriteObject {
         if (!dead) {
             batcher.begin();
             batcher.setColor(Color.WHITE);
-            batcher.draw(AssetLoader.ship, getX(), getY(), getWidth() / 2, getHeight() / 2, getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
-            batcher.draw(AssetLoader.thrusters.getKeyFrame(runTime), getX(), getY() + (21.0f * getScaleY()), getWidth() / 2, getHeight() / 2, getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+            batcher.draw(AssetLoader.ship(), getX(), getY(), getWidth() / 2, getHeight() / 2, getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+            batcher.draw(AssetLoader.thrusters().getKeyFrame(runTime), getX(), getY() + (21.0f * getScaleY()), getWidth() / 2, getHeight() / 2, getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
             batcher.end();
         } else {
-            if (updateExplotionTime) {
-                explosionTime = runTime;
-                updateExplotionTime = false;
-            }
             batcher.begin();
             batcher.setColor(Color.WHITE);
-            batcher.draw(AssetLoader.explosions.getKeyFrame(runTime - explosionTime), getX(), getY());
+            batcher.draw(AssetLoader.explosion().getKeyFrame(runTime), getX(), getY());
             batcher.end();
         }
 //        Gdx.gl.glEnable(GL20.GL_BLEND);
