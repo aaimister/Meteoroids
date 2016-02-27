@@ -37,8 +37,8 @@ public class GameRenderer {
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(cam.combined);
 
-        initGameObjects();
-        initAssets();
+        font = AssetLoader.font;
+        outline = AssetLoader.outline;
     }
 
     public void render(float runTime) {
@@ -47,15 +47,6 @@ public class GameRenderer {
 
         world.draw(batcher, shapeRenderer, font, outline, runTime);
 
-    }
-
-    private void initGameObjects() {
-
-    }
-
-    private void initAssets() {
-        font = AssetLoader.font;
-        outline = AssetLoader.outline;
     }
 
     public OrthographicCamera getCamera() {

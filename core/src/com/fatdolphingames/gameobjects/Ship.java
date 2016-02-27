@@ -1,14 +1,10 @@
 package com.fatdolphingames.gameobjects;
 
 import aurelienribon.tweenengine.*;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Circle;
 import com.fatdolphingames.accessors.SpriteAccessor;
 import com.fatdolphingames.gameworld.GameWorld;
 import com.fatdolphingames.helpers.AssetLoader;
@@ -23,6 +19,7 @@ public class Ship extends SpriteObject {
 
     private long sideRollTime;
     private long sideRollTimer;
+    private long deathTimer;
 
     private float gameWidth;
     private float fingerX[];
@@ -140,6 +137,10 @@ public class Ship extends SpriteObject {
         }
     }
 
+    public boolean respawn() {
+        return System.currentTimeMillis() >= deathTimer;
+    }
+
     private float calcDistance(float newX, float newY) {
         return (float) Math.sqrt(Math.pow(newX - getX(), 2) + Math.pow(newY - getY(), 2));
     }
@@ -149,6 +150,7 @@ public class Ship extends SpriteObject {
         if (!dead && !chargeBar.isDodging() && getBoundingCircle().overlaps(so.getBoundingCircle())) {
             dead = true;
             stopMovement();
+            deathTimer = System.currentTimeMillis() + 1000;
             AssetLoader.explosion().play();
         }
     }
@@ -175,25 +177,5 @@ public class Ship extends SpriteObject {
             batcher.draw(AssetLoader.explosion().getKeyFrame(runTime), getX(), getY());
             batcher.end();
         }
-//        Gdx.gl.glEnable(GL20.GL_BLEND);
-//        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-//
-//        shapeRenderer.begin(ShapeType.Filled);
-//        shapeRenderer.setColor(1.0f, 0.0f, 0.0f, getColor().a);
-//        shapeRenderer.rect(getX() + (getWidth() - getWidth() * getScaleX()) / 2.0f, getY() + (getHeight() - getHeight() * getScaleY()) / 2.0f, getWidth() * getScaleX(), getHeight() * getScaleY());
-//        shapeRenderer.end();
-//
-//        shapeRenderer.begin(ShapeType.Line);
-//        shapeRenderer.setColor(0.0f, 0.0f, 0.0f, getColor().a);
-//        shapeRenderer.rect(getX() + (getWidth() - getWidth() * getScaleX()) / 2.0f, getY() + (getHeight() - getHeight() * getScaleY()) / 2.0f, getWidth() * getScaleX(), getHeight() * getScaleY());
-//        shapeRenderer.end();
-//
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-//        shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 0.5f);
-//        Circle cbounds = getBoundingCircle();
-//        shapeRenderer.circle(cbounds.x + (getWidth() - getWidth() * getScaleX()) / 2.0f, cbounds.y + (getHeight() - getHeight() * getScaleY()) / 2.0f, cbounds.radius);
-//        shapeRenderer.end();
-//
-//        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fatdolphingames.gameobjects.*;
+import com.fatdolphingames.helpers.AssetLoader;
 
 public class GameWorld {
 
@@ -13,6 +14,8 @@ public class GameWorld {
     private PadManager padManager;
     private StarManager starManager;
     private MeteorManager meteorManager;
+    private ScreenText retry;
+    private Score score;
 
     private float gameWidth;
     private float gameHeight;
@@ -28,22 +31,29 @@ public class GameWorld {
         padManager = new PadManager(this, gameWidth, gameHeight, 50, 100);
         starManager = new StarManager(this);
         meteorManager = new MeteorManager(this, 9);
+        float stringWidth = AssetLoader.calculateFontWidth("Tap To Retry", 0.3f);
+        retry = new ScreenText(this, 35, midPointY - (stringWidth / 2.0f), (int) stringWidth, (int) AssetLoader.calculateFontHeight("Tap To Retry", 0.3f), "Tap To Retry", 0.3f);
+        score = new Score(this, 3.0f, gameHeight - 22.0f, 0, 0);
     }
 
     public void update(float delta) {
     //    System.out.println(tweenManager.getRunningTweensCount());
+        if (!ship.isAlive() && ship.respawn()) {
+            retry.show();
+        }
         tweenManager.update(delta);
         ship.update(delta);
         starManager.update(delta);
         meteorManager.update(delta);
+        score.update(delta);
     }
 
     public void touchDown(float screenX, float screenY, int pointer) {
         if (ship.isAlive()) {
             ship.touchDown(screenX, screenY, pointer);
             padManager.touchDown(screenX, screenY, pointer);
-            starManager.touchDown(screenX, screenY, pointer);
-        } else {
+        } else if (ship.respawn()) {
+            retry.hide();
             reset();
         }
     }
@@ -51,14 +61,13 @@ public class GameWorld {
     public void touchUp(float screenX, float screenY, int pointer) {
         ship.touchUp(screenX, screenY, pointer);
         padManager.touchUp(screenX, screenY, pointer);
-        starManager.touchUp(screenX, screenY, pointer);
     }
 
     public void reset() {
         ship.reset();
         padManager.reset();
-    //    starManager.reset();
         meteorManager.reset();
+        score.reset();
     }
 
     public void checkShipCollisions(Meteor[] meteors) {
@@ -73,6 +82,24 @@ public class GameWorld {
         ship.draw(batcher, shapeRenderer, font, outline, runTime);
         meteorManager.draw(batcher, shapeRenderer, font, outline, runTime);
         ship.drawChargeBar(batcher, shapeRenderer, font, outline, runTime);
+        retry.draw(batcher, shapeRenderer, font, outline, runTime);
+        score.draw(batcher, shapeRenderer, font, outline, runTime);
+    }
+
+    public void addScore() {
+        score.addScore();
+    }
+
+    public int getScore() {
+        return score.getScore();
+    }
+
+    public int getBestScore() {
+        return score.getBestScore();
+    }
+
+    public boolean isShipAlive() {
+        return ship.isAlive();
     }
 
     public float getGameWidth() {

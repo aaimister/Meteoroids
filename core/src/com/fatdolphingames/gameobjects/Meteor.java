@@ -68,6 +68,9 @@ public class Meteor extends SpriteObject {
                         @Override
                         public void onEvent(int type, BaseTween<?> source) {
                             offScreen = true;
+                            if (world.isShipAlive()) {
+                                world.addScore();
+                            }
                         }
                     })
                     .start(tweenManager);

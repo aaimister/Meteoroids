@@ -5,12 +5,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.fatdolphingames.gameobjects.Pad;
 
 public class AssetLoader {
 
     private static ShipPool shipPool;
+    private static GlyphLayout layout;
 
     public static Texture dolphin;
     public static Texture[] loadingScreen;
@@ -20,12 +22,17 @@ public class AssetLoader {
     public static TextureRegion[][] meteoroids;
     public static TextureRegion chargeBar;
     public static TextureRegion chargeBarSquare[];
+    public static TextureRegion crown;
 
     public static BitmapFont font;
     public static BitmapFont outline;
 
+    public static final Color BLACK = getColor(46.0f, 46.0f, 46.0f, 1.0f);
+    public static final Color WHITE = getColor(251.0f, 244.0f, 238.0f, 1.0f);
+
     public static void start() {
         shipPool = new ShipPool();
+        layout = new GlyphLayout();
 
         dolphin = new Texture(Gdx.files.internal("data/FatDolphinGames.png"));
         dolphin.setFilter(TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -48,6 +55,8 @@ public class AssetLoader {
         chargeBar = new TextureRegion(texture, 84, 63, 24, 4);
         chargeBarSquare = new TextureRegion[] { new TextureRegion(texture, 84, 58, 4, 4), new TextureRegion(texture, 89, 58, 4, 4) };
 
+        crown = new TextureRegion(texture, 162, 29, 13, 13);
+        crown.flip(false, true);
     }
 
     public static TextureRegion ship() {
@@ -60,6 +69,27 @@ public class AssetLoader {
 
     public static Animation explosion() {
         return shipPool.explosionAnimation;
+    }
+
+    public static float calculateFontWidth(String text, float scaleX) {
+        if (font.getScaleX() != scaleX) {
+            setFontScale(scaleX);
+        }
+        layout.setText(font, text);
+        return layout.width;
+    }
+
+    public static float calculateFontHeight(String text, float scaleY) {
+        if (font.getScaleY() != scaleY) {
+            setFontScale(scaleY);
+        }
+        layout.setText(font, text);
+        return layout.height;
+    }
+
+    public static void setFontScale(float scale) {
+        font.getData().setScale(scale, -scale);
+        outline.getData().setScale(scale, -scale);
     }
 
     public static Color getColor(float r, float g, float b, float a) {
