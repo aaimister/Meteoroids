@@ -4,28 +4,23 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.fatdolphingames.gameobjects.Ship;
 import com.fatdolphingames.gameworld.GameWorld;
 
 public class InputHandler implements InputProcessor {
 
     private GameWorld world;
-    private Ship ship;
 
     private int dragCount;
     private int fingers;
 
     private float scaleX;
     private float scaleY;
-    private float startX;
-    private float startY;
 
     public InputHandler(GameWorld world, OrthographicCamera cam) {
         this.world = world;
 
         scaleX = ((float) Gdx.graphics.getWidth()) / cam.viewportWidth;
         scaleY = ((float) Gdx.graphics.getHeight()) / cam.viewportHeight;
-        ship = world.getShip();
     }
 
     @Override
@@ -50,9 +45,9 @@ public class InputHandler implements InputProcessor {
     public boolean keyUp(int keycode) {
         fingers--;
         if (keycode == Keys.LEFT) {
-            world.touchUp(0, 0, fingers);
+            world.touchUp(0, 0, fingers, 0);
         } else if (keycode == Keys.RIGHT) {
-            world.touchUp(136, 0, fingers);
+            world.touchUp(136, 0, fingers, 0);
         }
 
         return false;
@@ -69,6 +64,7 @@ public class InputHandler implements InputProcessor {
         screenX = (int) (((float) screenX) / scaleX);
         screenY = (int) (((float) screenY) / scaleY);
         fingers++;
+        dragCount = 0;
         world.touchDown(screenX, screenY, fingers);
         return false;
     }
@@ -78,12 +74,13 @@ public class InputHandler implements InputProcessor {
         screenX = (int) (((float) screenX) / scaleX);
         screenY = (int) (((float) screenY) / scaleY);
         fingers = fingers - 1 >= 0 ? fingers - 1 : 0;
-        world.touchUp(screenX, screenY, fingers);
+        world.touchUp(screenX, screenY, fingers, dragCount);
         return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        dragCount++;
         return false;
     }
 

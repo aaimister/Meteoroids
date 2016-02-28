@@ -23,6 +23,9 @@ public class AssetLoader {
     public static TextureRegion chargeBar;
     public static TextureRegion chargeBarSquare[];
     public static TextureRegion crown;
+    public static TextureRegion tapRex;
+    public static TextureRegion libGDX;
+    public static TextureRegion java;
 
     public static BitmapFont font;
     public static BitmapFont outline;
@@ -57,6 +60,15 @@ public class AssetLoader {
 
         crown = new TextureRegion(texture, 162, 29, 13, 13);
         crown.flip(false, true);
+
+        tapRex = new TextureRegion(texture, 110, 208, 48, 48);
+        tapRex.flip(false, true);
+
+        libGDX = new TextureRegion(texture, 159, 208, 48, 48);
+        libGDX.flip(false, true);
+
+        java = new TextureRegion(texture, 208, 208, 48, 48);
+        java.flip(false, true);
     }
 
     public static TextureRegion ship() {

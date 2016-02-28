@@ -52,6 +52,10 @@ public class Score extends SpriteObject {
         }
     }
 
+    public boolean newBest() {
+        return newBest;
+    }
+
     public int getScore() {
         return score;
     }

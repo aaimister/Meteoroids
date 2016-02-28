@@ -53,6 +53,14 @@ public class ScreenText extends SpriteObject {
         // Do nothing.
     }
 
+    public void toggle() {
+        if (show) {
+            hide();
+        } else {
+            show();
+        }
+    }
+
     public void show() {
         if (!show) {
             show = true;

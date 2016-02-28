@@ -152,6 +152,7 @@ public class Ship extends SpriteObject {
             stopMovement();
             deathTimer = System.currentTimeMillis() + 1000;
             AssetLoader.explosion().play();
+            world.toggleRetryText();
         }
     }
 

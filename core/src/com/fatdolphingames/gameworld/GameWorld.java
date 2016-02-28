@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fatdolphingames.gameobjects.*;
+import com.fatdolphingames.gameobjects.menu.Menu;
 import com.fatdolphingames.helpers.AssetLoader;
 
 public class GameWorld {
@@ -16,10 +17,13 @@ public class GameWorld {
     private MeteorManager meteorManager;
     private ScreenText retry;
     private Score score;
+    private Menu menu;
 
     private float gameWidth;
     private float gameHeight;
     private float midPointY;
+    private float startX;
+    private float startY;
 
     public GameWorld(TweenManager tweenManager, float gameWidth, float gameHeight, float midPointY) {
         this.tweenManager = tweenManager;
@@ -34,33 +38,40 @@ public class GameWorld {
         float stringWidth = AssetLoader.calculateFontWidth("Tap To Retry", 0.3f);
         retry = new ScreenText(this, 35, midPointY - (stringWidth / 2.0f), (int) stringWidth, (int) AssetLoader.calculateFontHeight("Tap To Retry", 0.3f), "Tap To Retry", 0.3f);
         score = new Score(this, 3.0f, gameHeight - 22.0f, 0, 0);
+        menu = new Menu(this, -113.0f, 27.0f, 112, 180);
     }
 
     public void update(float delta) {
     //    System.out.println(tweenManager.getRunningTweensCount());
-        if (!ship.isAlive() && ship.respawn()) {
-            retry.show();
-        }
         tweenManager.update(delta);
         ship.update(delta);
         starManager.update(delta);
         meteorManager.update(delta);
         score.update(delta);
+        menu.update(delta);
     }
 
     public void touchDown(float screenX, float screenY, int pointer) {
+        startX = screenX;
+        startY = screenY;
         if (ship.isAlive()) {
             ship.touchDown(screenX, screenY, pointer);
             padManager.touchDown(screenX, screenY, pointer);
+        } else if (menu.isOpen()) {
+            menu.touchDown(screenX, screenY, pointer);
+        }
+    }
+
+    public void touchUp(float screenX, float screenY, int pointer, int dragCount) {
+        padManager.touchUp(screenX, screenY, pointer);
+        if (ship.isAlive()) {
+            ship.touchUp(screenX, screenY, pointer);
+        } else if (dragCount > 3 || menu.isOpen()) {
+            menu.touchUp(screenX, screenY, pointer);
         } else if (ship.respawn()) {
             retry.hide();
             reset();
         }
-    }
-
-    public void touchUp(float screenX, float screenY, int pointer) {
-        ship.touchUp(screenX, screenY, pointer);
-        padManager.touchUp(screenX, screenY, pointer);
     }
 
     public void reset() {
@@ -68,6 +79,7 @@ public class GameWorld {
         padManager.reset();
         meteorManager.reset();
         score.reset();
+        menu.reset();
     }
 
     public void checkShipCollisions(Meteor[] meteors) {
@@ -84,10 +96,15 @@ public class GameWorld {
         ship.drawChargeBar(batcher, shapeRenderer, font, outline, runTime);
         retry.draw(batcher, shapeRenderer, font, outline, runTime);
         score.draw(batcher, shapeRenderer, font, outline, runTime);
+        menu.draw(batcher, shapeRenderer, font, outline, runTime);
     }
 
     public void addScore() {
         score.addScore();
+    }
+
+    public void toggleRetryText() {
+        retry.toggle();
     }
 
     public int getScore() {
@@ -96,6 +113,18 @@ public class GameWorld {
 
     public int getBestScore() {
         return score.getBestScore();
+    }
+
+    public float getStartX() {
+        return startX;
+    }
+
+    public float getStartY() {
+        return startY;
+    }
+
+    public boolean newBestScore() {
+        return score.newBest();
     }
 
     public boolean isShipAlive() {
