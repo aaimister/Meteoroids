@@ -3,6 +3,7 @@ package com.fatdolphingames.gameobjects;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -25,7 +26,7 @@ public class Pad extends SpriteObject {
 
         this.left = left;
 
-        setColor(AssetLoader.getColor(46.0f, 46.0f, 46.0f, 0.0f));
+        setColor(new Color(1.0f, 1.0f, 1.0f, 0.0f));
     }
 
     @Override
@@ -45,7 +46,7 @@ public class Pad extends SpriteObject {
         if (draw && !(left ? screenX <= gameWidth / 2.0f : screenX > gameWidth / 2.0f)) {
             setAlpha(0.0f);
         } else if (draw = left ? screenX <= gameWidth / 2.0f : screenX > gameWidth / 2.0f) {
-            Tween.to(this, SpriteAccessor.ALPHA, 0.2f).target(0.5f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+            Tween.to(this, SpriteAccessor.ALPHA, 0.2f).target(0.12f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
         }
     }
 
@@ -56,7 +57,7 @@ public class Pad extends SpriteObject {
             draw = false;
             setAlpha(0.0f);
         } else {
-            Tween.to(this, SpriteAccessor.ALPHA, 0.2f).target(0.5f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+            Tween.to(this, SpriteAccessor.ALPHA, 0.2f).target(0.12f).ease(TweenEquations.easeInOutQuad).start(tweenManager);
         }
     }
 
@@ -72,7 +73,6 @@ public class Pad extends SpriteObject {
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
             shapeRenderer.begin(ShapeType.Filled);
-
             if (left) {
                 // Left Button
                 shapeRenderer.setColor(getColor());
@@ -88,7 +88,6 @@ public class Pad extends SpriteObject {
                 shapeRenderer.arc(getX(), getY() + getHeight() - (getHeight() * 0.1f), getWidth() * 0.2f, 90.0f, 90.0f);
                 shapeRenderer.rect(getX() - (getWidth() * 0.2f), getY() + (getHeight() * 0.1f), getWidth() * 0.2f, 80.0f);
             }
-
             shapeRenderer.end();
 
             Gdx.gl.glDisable(GL20.GL_BLEND);

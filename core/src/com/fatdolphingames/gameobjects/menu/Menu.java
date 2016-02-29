@@ -3,7 +3,6 @@ package com.fatdolphingames.gameobjects.menu;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -24,6 +23,7 @@ public class Menu extends SpriteObject {
     private Color red;
 
     private ScreenText swipeText;
+    private MenuButton[] buttons;
 
     private boolean open;
 
@@ -38,35 +38,30 @@ public class Menu extends SpriteObject {
         endPosition = new Vector2(12.0f, 27.0f);
         startPosition = new Vector2[] { new Vector2(-width - 1, endPosition.y), new Vector2(endPosition.x, -height - 1), new Vector2(gameWidth + 1, endPosition.y), new Vector2(endPosition.x, gameHeight + 1) };
         swipeText = new ScreenText(world, 44.0f, 10.0f, 0, 0, "Swipe To Close", 0.20f);
+        buttons = new MenuButton[] { new AdButton(world, x, y, 12, 12, 20.0f, 132.0f), new VolumeButton(world, x, y, 12, 12, 20.0f, 115.0f),
+            new RexButton(world, x, y, 10, 10, 10.0f, height - 15.0f), new MedalButton(world, x, y, 30, 30, 42.0f, 25.0f),
+            new CharacterButton(world, x, y, 22, 22, 77.0f, 111.0f), new ColorButton(world, x, y, 10, 10, 84.0f, 140.0f) };
     }
 
     @Override
     public void update(float delta) {
-
+        // Do nothing.
     }
 
     @Override
     public void reset() {
-
+        // Do nothing.
     }
 
     @Override
     public void touchDown(float screenX, float screenY, int pointer) {
-
+        for (MenuButton mb : buttons) {
+            mb.touchDown(screenX, screenY, pointer);
+        }
     }
 
     @Override
     public void touchUp(float screenX, float screenY, int pointer) {
-//        float leftRight = Math.abs(screenX - startX);
-//        float upDown = Math.abs(screenY - startY);
-//
-//        if (leftRight >= 50.0f || upDown >= 50.0f) {
-//            if (leftRight > upDown) {
-//                world.moveMenu(screenX > startX ? direction.LEFT : direction.RIGHT);
-//            } else {
-//                world.moveMenu(screenY < startY ? direction.UP : direction.DOWN);
-//            }
-//        }
         float leftRight = Math.abs(screenX - world.getStartX());
         float upDown = Math.abs(screenY - world.getStartY());
         if (leftRight >= 25.0f || upDown >= 25.f) {
@@ -76,16 +71,22 @@ public class Menu extends SpriteObject {
             } else {
                 direction = screenY > world.getStartY() ? 1 : 3;
             }
-            world.toggleRetryText();
             swipeText.toggle();
             Vector2 start = open ? startPosition[direction < 2 ? direction + 2 : direction - 2] : startPosition[direction];
             tweenManager.killTarget(this);
             if (open) {
                 open = false;
+                for (MenuButton mb : buttons) {
+                    mb.moveButton(null, start);
+                }
                 Tween.to(this, SpriteAccessor.POSITION, 0.5f).target(start.x, start.y).ease(TweenEquations.easeInOutQuad).start(tweenManager);
             } else {
                 setPosition(start.x, start.y);
+                world.hideRetryText();
                 open = true;
+                for (MenuButton mb : buttons) {
+                    mb.moveButton(start, endPosition);
+                }
                 Tween.to(this, SpriteAccessor.POSITION, 0.5f).target(endPosition.x, endPosition.y).ease(TweenEquations.easeInOutQuad).start(tweenManager);
             }
         }
@@ -162,7 +163,10 @@ public class Menu extends SpriteObject {
         font.draw(batcher, "Powered By", getX() + getWidth() - 38.0f, getY() + getHeight() - 23.0f);
         batcher.draw(AssetLoader.libGDX, getX() + getWidth() - 32.0f, getY() + getHeight() - 15.0f, 0.0f, 0.0f, AssetLoader.libGDX.getRegionWidth(), AssetLoader.libGDX.getRegionHeight(), -0.2f, -0.2f, 180.0f);
         batcher.draw(AssetLoader.java, getX() + getWidth() - 20.0f, getY() + getHeight() - 15.0f, 0.0f, 0.0f, AssetLoader.java.getRegionWidth(), AssetLoader.java.getRegionHeight(), -0.2f, -0.2f, 180.0f);
-
         batcher.end();
+
+        for (MenuButton mb : buttons) {
+            mb.draw(batcher, shapeRenderer, font, outline, runTime);
+        }
     }
 }

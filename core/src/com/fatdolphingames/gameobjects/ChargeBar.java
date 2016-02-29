@@ -61,6 +61,7 @@ public class ChargeBar {
 
     public void reset() {
         dodging = false;
+        rechargeTimer = 0;
         for (ChargeSquare cs : squares) {
             cs.reset();
         }

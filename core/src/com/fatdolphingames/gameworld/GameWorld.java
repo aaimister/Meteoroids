@@ -43,6 +43,9 @@ public class GameWorld {
 
     public void update(float delta) {
     //    System.out.println(tweenManager.getRunningTweensCount());
+        if (!ship.isAlive() && ship.respawn() && !menu.isOpen()) {
+            retry.show();
+        }
         tweenManager.update(delta);
         ship.update(delta);
         starManager.update(delta);
@@ -103,6 +106,10 @@ public class GameWorld {
         score.addScore();
     }
 
+    public void hideRetryText() {
+        retry.hide();
+    }
+
     public void toggleRetryText() {
         retry.toggle();
     }
@@ -145,18 +152,6 @@ public class GameWorld {
 
     public TweenManager getTweenManager() {
          return tweenManager;
-    }
-
-    public Ship getShip() {
-        return ship;
-    }
-
-    public PadManager getPadManager() {
-        return padManager;
-    }
-
-    public StarManager getStarManager() {
-        return starManager;
     }
 
 }

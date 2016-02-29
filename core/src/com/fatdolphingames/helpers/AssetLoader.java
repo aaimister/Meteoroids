@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.fatdolphingames.gameobjects.Pad;
 
 public class AssetLoader {
 
@@ -26,6 +25,8 @@ public class AssetLoader {
     public static TextureRegion tapRex;
     public static TextureRegion libGDX;
     public static TextureRegion java;
+    public static TextureRegion ads[];
+    public static TextureRegion volume[];
 
     public static BitmapFont font;
     public static BitmapFont outline;
@@ -69,6 +70,12 @@ public class AssetLoader {
 
         java = new TextureRegion(texture, 208, 208, 48, 48);
         java.flip(false, true);
+
+        ads = new TextureRegion[] { new TextureRegion(texture, 116, 0, 22, 22), new TextureRegion(texture, 139, 0, 22, 22) };
+        flip(ads, false, true);
+
+        volume = new TextureRegion[] { new TextureRegion(texture, 116, 23, 22, 22), new TextureRegion(texture, 139, 23, 22, 22) };
+        flip(volume, false, true);
     }
 
     public static TextureRegion ship() {
