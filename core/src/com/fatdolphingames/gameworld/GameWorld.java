@@ -18,6 +18,7 @@ public class GameWorld {
     private ScreenText retry;
     private Score score;
     private Menu menu;
+    private Warning warning;
 
     private float gameWidth;
     private float gameHeight;
@@ -39,6 +40,7 @@ public class GameWorld {
         retry = new ScreenText(this, 35, midPointY - (stringWidth / 2.0f), (int) stringWidth, (int) AssetLoader.calculateFontHeight("Tap To Retry", 0.3f), "Tap To Retry", 0.3f);
         score = new Score(this, 3.0f, gameHeight - 22.0f, 0, 0);
         menu = new Menu(this, -113.0f, 27.0f, 112, 180);
+        warning = new Warning(this, gameWidth / 2.0f - 16, midPointY - 16, 32, 32);
     }
 
     public void update(float delta) {
@@ -83,6 +85,7 @@ public class GameWorld {
         meteorManager.reset();
         score.reset();
         menu.reset();
+        warning.reset();
     }
 
     public void checkShipCollisions(Meteor[] meteors) {
@@ -99,6 +102,7 @@ public class GameWorld {
         ship.drawChargeBar(batcher, shapeRenderer, font, outline, runTime);
         retry.draw(batcher, shapeRenderer, font, outline, runTime);
         score.draw(batcher, shapeRenderer, font, outline, runTime);
+        warning.draw(batcher, shapeRenderer, font, outline, runTime);
         menu.draw(batcher, shapeRenderer, font, outline, runTime);
     }
 

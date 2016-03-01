@@ -10,13 +10,14 @@ import com.fatdolphingames.helpers.AssetLoader;
 public class Score extends SpriteObject {
 
     private boolean newBest;
+    private boolean playSound;
 
     private int bestScore;
     private int score;
 
     public Score(GameWorld world, float x, float y, int width, int height) {
         super(world, x, y, width, height);
-
+        playSound = true;
     }
 
     @Override
@@ -28,6 +29,7 @@ public class Score extends SpriteObject {
     public void reset() {
         score = 0;
         newBest = false;
+        playSound = true;
     }
 
     @Override
@@ -49,6 +51,10 @@ public class Score extends SpriteObject {
         score++;
         if ((newBest = score > bestScore)) {
             bestScore = score;
+            if (playSound) {
+                playSound = false;
+                AssetLoader.highScore.play(AssetLoader.volume);
+            }
         }
     }
 

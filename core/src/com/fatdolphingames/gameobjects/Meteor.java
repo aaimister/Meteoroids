@@ -70,6 +70,7 @@ public class Meteor extends SpriteObject {
                             offScreen = true;
                             if (world.isShipAlive()) {
                                 world.addScore();
+                                AssetLoader.scoreCount.play(AssetLoader.volume);
                             }
                         }
                     })

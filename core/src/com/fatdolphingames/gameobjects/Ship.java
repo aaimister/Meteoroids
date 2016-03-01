@@ -73,7 +73,23 @@ public class Ship extends SpriteObject {
             screenX = screenX <= gameWidth / 2.0f ? 0.0f : gameWidth - fullWidth;
 
             if (pointer > 1 && chargeBar.dodge()) {
-                Tween.to(this, SpriteAccessor.SCALE, 0.5f).target(0.5f, 0.5f).ease(TweenEquations.easeInOutQuad).repeatYoyo(1, 1.0f).start(tweenManager);
+                Timeline.createSequence()
+                        .push(Tween.to(this, SpriteAccessor.SCALE, 0.5f).target(0.5f, 0.5f).ease(TweenEquations.easeInOutQuad).setCallback(new TweenCallback() {
+                                @Override
+                            public void onEvent(int type, BaseTween<?> source) {
+                                AssetLoader.dodgeDown.play(AssetLoader.volume);
+                            }
+                        }).setCallbackTriggers(TweenCallback.BEGIN))
+                        .pushPause(1.0f)
+                        .push(Tween.to(this, SpriteAccessor.SCALE, 0.5f).target(1.0f, 1.0f).ease(TweenEquations.easeInOutQuad).setCallback(new TweenCallback() {
+                            @Override
+                            public void onEvent(int type, BaseTween<?> source) {
+                                AssetLoader.dodgeUp.play(AssetLoader.volume);
+                            }
+                        }).setCallbackTriggers(TweenCallback.BEGIN))
+                        .start(tweenManager);
+
+               // Tween.to(this, SpriteAccessor.SCALE, 0.5f).target(0.5f, 0.5f).ease(TweenEquations.easeInOutQuad).repeatYoyo(1, 1.0f).start(tweenManager);
             }
             chargeBar.updateTimer();
 
@@ -171,6 +187,7 @@ public class Ship extends SpriteObject {
             stopMovement();
             deathTimer = System.currentTimeMillis() + 1000;
             AssetLoader.explosion().play();
+            AssetLoader.explosion.play(AssetLoader.volume);
         }
     }
 

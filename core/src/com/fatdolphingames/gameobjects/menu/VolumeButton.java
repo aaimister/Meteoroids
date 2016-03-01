@@ -30,6 +30,7 @@ public class VolumeButton extends MenuButton {
     public void touchDown(float screenX, float screenY, int pointer) {
         if (getBoundingRectangle().contains(screenX, screenY)) {
             on = !on;
+            AssetLoader.toggleVolume();
         }
     }
 
@@ -47,7 +48,7 @@ public class VolumeButton extends MenuButton {
     public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
         batcher.begin();
         batcher.setColor(Color.WHITE);
-        batcher.draw(AssetLoader.volume[on ? 0 : 1], getX(), getY(), getWidth(), getHeight());
+        batcher.draw(AssetLoader.sound[on ? 0 : 1], getX(), getY(), getWidth(), getHeight());
         batcher.end();
     }
 }

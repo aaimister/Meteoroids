@@ -1,6 +1,7 @@
 package com.fatdolphingames.helpers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -26,10 +27,20 @@ public class AssetLoader {
     public static TextureRegion libGDX;
     public static TextureRegion java;
     public static TextureRegion ads[];
-    public static TextureRegion volume[];
+    public static TextureRegion sound[];
+    public static TextureRegion warning;
 
     public static BitmapFont font;
     public static BitmapFont outline;
+
+    public static Sound highScore;
+    public static Sound scoreCount;
+    public static Sound warningVoice;
+    public static Sound explosion;
+    public static Sound dodgeDown;
+    public static Sound dodgeUp;
+
+    public static float volume;
 
     public static final Color BLACK = getColor(46.0f, 46.0f, 46.0f, 1.0f);
     public static final Color WHITE = getColor(251.0f, 244.0f, 238.0f, 1.0f);
@@ -37,6 +48,8 @@ public class AssetLoader {
     public static void start() {
         shipPool = new ShipPool();
         layout = new GlyphLayout();
+
+        volume = 1.0f;
 
         dolphin = new Texture(Gdx.files.internal("data/FatDolphinGames.png"));
         dolphin.setFilter(TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -74,8 +87,18 @@ public class AssetLoader {
         ads = new TextureRegion[] { new TextureRegion(texture, 116, 0, 22, 22), new TextureRegion(texture, 139, 0, 22, 22) };
         flip(ads, false, true);
 
-        volume = new TextureRegion[] { new TextureRegion(texture, 116, 23, 22, 22), new TextureRegion(texture, 139, 23, 22, 22) };
-        flip(volume, false, true);
+        sound = new TextureRegion[] { new TextureRegion(texture, 116, 23, 22, 22), new TextureRegion(texture, 139, 23, 22, 22) };
+        flip(sound, false, true);
+
+        warning = new TextureRegion(texture, 176, 0, 32, 32);
+        warning.flip(false, true);
+
+        highScore = Gdx.audio.newSound(Gdx.files.internal("data/sounds/highscore.mp3"));
+        scoreCount = Gdx.audio.newSound(Gdx.files.internal("data/sounds/scorecount.mp3"));
+        warningVoice = Gdx.audio.newSound(Gdx.files.internal("data/sounds/warning.mp3"));
+        explosion = Gdx.audio.newSound(Gdx.files.internal("data/sounds/explosion.mp3"));
+        dodgeDown = Gdx.audio.newSound(Gdx.files.internal("data/sounds/dodgedown.mp3"));
+        dodgeUp = Gdx.audio.newSound(Gdx.files.internal("data/sounds/dodgeup.mp3"));
     }
 
     public static TextureRegion ship() {
@@ -111,6 +134,10 @@ public class AssetLoader {
         outline.getData().setScale(scale, -scale);
     }
 
+    public static void toggleVolume() {
+        volume = volume == 1.0f ? 0.0f : 1.0f;
+    }
+
     public static Color getColor(float r, float g, float b, float a) {
         return new Color(r / 255.0f, g / 255.0f, b / 255.0f, a);
     }
@@ -129,6 +156,12 @@ public class AssetLoader {
         texture.dispose();
         font.dispose();
         outline.dispose();
+        highScore.dispose();
+        scoreCount.dispose();
+        warningVoice.dispose();
+        explosion.dispose();
+        dodgeDown.dispose();
+        dodgeUp.dispose();
     }
 
 }
