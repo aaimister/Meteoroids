@@ -3,6 +3,7 @@ package com.fatdolphingames.gameobjects;
 import aurelienribon.tweenengine.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fatdolphingames.accessors.SpriteAccessor;
@@ -16,6 +17,7 @@ public class Ship extends SpriteObject {
     private boolean dead;
     private boolean sideRoll;
     private boolean teleporting;
+    private boolean resetting;
 
     private long sideRollTime;
     private long sideRollTimer;
@@ -24,16 +26,21 @@ public class Ship extends SpriteObject {
     private float gameWidth;
     private float fingerX[];
     private float lastScreenX;
+    private float startX;
+    private float startY;
 
     private int fullWidth;
 
     public Ship(GameWorld world, float x, float y, int width, int height) {
         super(world, x, y, width, height);
+        startX = x;
+        startY = y;
         gameWidth = world.getGameWidth();
         fingerX = new float[]{-1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f};
         fullWidth = width;
         chargeBar = new ChargeBar(world, gameWidth - 35.0f, world.getGameHeight() - 15, 24, 4, 2000, 20, 6000);
         sideRollTime = 215;
+        reset();
     }
 
     @Override
@@ -45,12 +52,24 @@ public class Ship extends SpriteObject {
     public void reset() {
         tweenManager.killTarget(this);
         dead = false;
+        resetting = true;
         chargeBar.reset();
+        setPosition(startX, world.getGameHeight() + getHeight() + 1);
+        setScale(0.5f, 0.5f);
+        Timeline.createParallel()
+                .push(Tween.to(this, SpriteAccessor.SCALE, 2.5f).target(1.0f, 1.0f).ease(TweenEquations.easeInOutQuad))
+                .push(Tween.to(this, SpriteAccessor.POSITION, 2.5f).target(startX, startY).ease(TweenEquations.easeInOutQuad))
+                .setCallback(new TweenCallback() {
+                    @Override
+                    public void onEvent(int type, BaseTween<?> source) {
+                        resetting = false;
+                    }
+                }).start(tweenManager);
     }
 
     @Override
     public void touchDown(float screenX, float screenY, int pointer) {
-        if (!dead && !teleporting) {
+        if (!dead && !teleporting && !resetting) {
             screenX = screenX <= gameWidth / 2.0f ? 0.0f : gameWidth - fullWidth;
 
             if (pointer > 1 && chargeBar.dodge()) {
@@ -87,7 +106,7 @@ public class Ship extends SpriteObject {
 
     @Override
     public void touchUp(float screenX, float screenY, int pointer) {
-        if (!dead) {
+        if (!dead && !resetting) {
             if (pointer > 0) {
                 screenX = screenX <= gameWidth / 2.0f ? 0.0f : gameWidth - fullWidth;
                 if (fingerX[pointer] == screenX) {

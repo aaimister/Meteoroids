@@ -16,6 +16,9 @@ public class MeteorManager {
     private ScreenBox screenBox;
     private Meteor[] meteors;
 
+    private long resetTimer;
+    private long resetTime;
+
     private float gameWidth;
 
     public MeteorManager(GameWorld world, int meteorCount) {
@@ -29,13 +32,18 @@ public class MeteorManager {
             int size = i % 3 == 0 ? 28 : i % 3 == 1 ? 20 : 8;
             meteors[i] = new Meteor(world, 0, -28, size, size);
         }
+
+        resetTime = 3000;
+        resetTimer = System.currentTimeMillis() + resetTime;
     }
 
     public void update(float delta) {
-        world.checkShipCollisions(meteors);
-        for (Meteor m : meteors) {
-            if (m.isOffScreen()) {
-                fireMeteor(m);
+        if (System.currentTimeMillis() >= resetTimer) {
+            world.checkShipCollisions(meteors);
+            for (Meteor m : meteors) {
+                if (m.isOffScreen()) {
+                    fireMeteor(m);
+                }
             }
         }
     }
@@ -44,6 +52,7 @@ public class MeteorManager {
         for (Meteor m : meteors) {
             m.reset();
         }
+        resetTimer = System.currentTimeMillis() + resetTime;
     }
 
     public void fireMeteor(Meteor m) {
