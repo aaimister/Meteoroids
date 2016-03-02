@@ -20,6 +20,8 @@ public class GameWorld {
     private Menu menu;
     private Warning warning;
 
+    private boolean tutorial;
+
     private float gameWidth;
     private float gameHeight;
     private float midPointY;
@@ -32,12 +34,14 @@ public class GameWorld {
         this.gameHeight = gameHeight;
         this.midPointY = midPointY;
 
+        tutorial = true;
+
         ship = new Ship(this, gameWidth / 2.0f - 12, gameHeight - 50, 24, 23);
         padManager = new PadManager(this, gameWidth, gameHeight, 50, 100);
         starManager = new StarManager(this);
         meteorManager = new MeteorManager(this, 9);
-        float stringWidth = AssetLoader.calculateFontWidth("Tap To Retry", 0.3f);
-        retry = new ScreenText(this, 35, midPointY - (stringWidth / 2.0f), (int) stringWidth, (int) AssetLoader.calculateFontHeight("Tap To Retry", 0.3f), "Tap To Retry", 0.3f);
+        float stringHeight = AssetLoader.calculateFontHeight("Tap To Retry", 0.3f);
+        retry = new ScreenText(this, 35, midPointY - (stringHeight / 2.0f), (int) AssetLoader.calculateFontWidth("Tap To Retry", 0.3f), (int) stringHeight, "Tap To Retry", 0.3f);
         score = new Score(this, 3.0f, gameHeight - 22.0f, 0, 0);
         menu = new Menu(this, -113.0f, 27.0f, 112, 180);
         warning = new Warning(this, gameWidth / 2.0f - 16, midPointY - 16, 32, 32);
@@ -45,7 +49,7 @@ public class GameWorld {
 
     public void update(float delta) {
     //    System.out.println(tweenManager.getRunningTweensCount());
-        if (!ship.isAlive() && ship.respawn() && !menu.isOpen()) {
+        if (!ship.isAlive() && ship.respawn() && !menu.isOpen() && !tutorial) {
             retry.show();
         }
         tweenManager.update(delta);
@@ -73,13 +77,14 @@ public class GameWorld {
             ship.touchUp(screenX, screenY, pointer);
         } else if (dragCount > 3 || menu.isOpen()) {
             menu.touchUp(screenX, screenY, pointer);
-        } else if (ship.respawn()) {
+        } else if (ship.respawn() && !tutorial) {
             retry.hide();
             reset();
         }
     }
 
     public void reset() {
+         tutorial = false;
         ship.reset();
         padManager.reset();
         meteorManager.reset();
@@ -118,6 +123,13 @@ public class GameWorld {
         retry.toggle();
     }
 
+    public void commenceShower() {
+        reset();
+//        tutorial = false;
+//        warning.reset();
+//        meteorManager.commenceShower();
+    }
+
     public int getScore() {
         return score.getScore();
     }
@@ -138,6 +150,10 @@ public class GameWorld {
         return score.newBest();
     }
 
+    public boolean isMenuOpen() {
+        return menu.isOpen();
+    }
+
     public boolean isShipAlive() {
         return ship.isAlive();
     }
@@ -156,6 +172,10 @@ public class GameWorld {
 
     public TweenManager getTweenManager() {
          return tweenManager;
+    }
+
+    public Ship getShip() {
+        return ship;
     }
 
 }

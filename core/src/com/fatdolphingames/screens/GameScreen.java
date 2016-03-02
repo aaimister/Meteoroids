@@ -1,11 +1,11 @@
 package com.fatdolphingames.screens;
 
-import aurelienribon.tweenengine.TweenManager;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fatdolphingames.gameworld.GameRenderer;
 import com.fatdolphingames.gameworld.GameWorld;
-import com.fatdolphingames.helpers.InputHandler;
 
 public class GameScreen implements Screen {
 
@@ -14,13 +14,13 @@ public class GameScreen implements Screen {
 
     private float runTime;
 
-    public GameScreen(TweenManager tweenManager, float gameWidth, float gameHeight, float midPointY) {
+    public GameScreen(GameWorld world, OrthographicCamera cam, SpriteBatch batcher, ShapeRenderer shapeRenderer) {
         runTime = 5.0f;
 
-        world = new GameWorld(tweenManager, gameWidth, gameHeight, midPointY);
-        renderer = new GameRenderer(world);
+        this.world = world;
+        renderer = new GameRenderer(world, cam, batcher, shapeRenderer);
 
-        Gdx.input.setInputProcessor(new InputHandler(world, renderer.getCamera()));
+        world.commenceShower();
     }
 
     @Override

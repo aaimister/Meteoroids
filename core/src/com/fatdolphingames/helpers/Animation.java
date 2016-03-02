@@ -22,7 +22,7 @@ public class Animation extends com.badlogic.gdx.graphics.g2d.Animation {
             play = false;
         }
 
-        return super.getKeyFrame(stateTime - startTime);
+        return super.getKeyFrame(Math.abs(stateTime - startTime));
     }
 
 }

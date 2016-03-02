@@ -44,6 +44,8 @@ public class AssetLoader {
 
     public static final Color BLACK = getColor(46.0f, 46.0f, 46.0f, 1.0f);
     public static final Color WHITE = getColor(251.0f, 244.0f, 238.0f, 1.0f);
+    public static final Color RED = getColor(166.0f, 45.0f, 48.0f, 1.0f);
+    public static final Color GREEN = getColor(76.0f, 166.0f, 45.0f, 1.0f);
 
     public static void start() {
         shipPool = new ShipPool();

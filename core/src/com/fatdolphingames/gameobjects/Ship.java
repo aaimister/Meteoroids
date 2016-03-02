@@ -3,7 +3,6 @@ package com.fatdolphingames.gameobjects;
 import aurelienribon.tweenengine.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fatdolphingames.accessors.SpriteAccessor;
@@ -38,7 +37,7 @@ public class Ship extends SpriteObject {
         gameWidth = world.getGameWidth();
         fingerX = new float[]{-1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f};
         fullWidth = width;
-        chargeBar = new ChargeBar(world, gameWidth - 35.0f, world.getGameHeight() - 15, 24, 4, 2000, 20, 6000);
+        chargeBar = new ChargeBar(world, gameWidth - 35.0f, world.getGameHeight() - 15.0f, 24, 4, 2000, 20, 6000);
         sideRollTime = 215;
         reset();
     }
@@ -53,6 +52,9 @@ public class Ship extends SpriteObject {
         tweenManager.killTarget(this);
         dead = false;
         resetting = true;
+        for (int i = 0; i < fingerX.length; i++) {
+            fingerX[i] = -1.0f;
+        }
         chargeBar.reset();
         setPosition(startX, world.getGameHeight() + getHeight() + 1);
         setScale(0.5f, 0.5f);
@@ -170,6 +172,18 @@ public class Ship extends SpriteObject {
         if (!teleporting) {
             tweenManager.killTarget(this, SpriteAccessor.POSITION);
         }
+    }
+
+    public boolean isResetting() {
+        return resetting;
+    }
+
+    public boolean isSideRoll() {
+        return sideRoll;
+    }
+
+    public boolean isTeleporting() {
+        return teleporting;
     }
 
     public boolean respawn() {

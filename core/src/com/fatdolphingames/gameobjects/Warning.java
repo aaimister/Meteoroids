@@ -12,7 +12,7 @@ public class Warning extends SpriteObject {
 
     public Warning(GameWorld world, float x, float y, int width, int height) {
         super(world, x, y, width, height);
-        reset();
+        setAlpha(0.0f);
     }
 
     @Override

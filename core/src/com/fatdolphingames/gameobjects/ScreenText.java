@@ -23,6 +23,7 @@ public class ScreenText extends SpriteObject {
         this.text = text;
         setScale(scale);
         setAlpha(0.0f);
+        setColor(AssetLoader.WHITE);
     }
 
 
@@ -93,8 +94,7 @@ public class ScreenText extends SpriteObject {
             batcher.begin();
             outline.setColor(c.r, c.g, c.b, getColor().a);
             outline.draw(batcher, text, getX(), getY());
-            c = AssetLoader.WHITE;
-            font.setColor(c.r, c.g, c.b, getColor().a);
+            font.setColor(getColor());
             font.draw(batcher, text, getX(), getY());
             batcher.end();
         }

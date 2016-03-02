@@ -1,20 +1,18 @@
 package com.fatdolphingames.gameobjects;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fatdolphingames.gameworld.GameWorld;
 import com.fatdolphingames.helpers.ScreenBox;
 
-import java.util.Random;
-
 public class MeteorManager {
 
-    private Random rand;
     private GameWorld world;
     private ScreenBox screenBox;
     private Meteor[] meteors;
+
+    private boolean pause;
 
     private long resetTimer;
     private long resetTime;
@@ -23,7 +21,6 @@ public class MeteorManager {
 
     public MeteorManager(GameWorld world, int meteorCount) {
         this.world = world;
-        rand = new Random();
         meteors = new Meteor[meteorCount];
         gameWidth = world.getGameWidth();
         screenBox = new ScreenBox(gameWidth, world.getGameHeight(), 28);
@@ -33,12 +30,14 @@ public class MeteorManager {
             meteors[i] = new Meteor(world, 0, -28, size, size);
         }
 
+        pause = true;
+
         resetTime = 3000;
         resetTimer = System.currentTimeMillis() + resetTime;
     }
 
     public void update(float delta) {
-        if (System.currentTimeMillis() >= resetTimer) {
+        if (!pause && System.currentTimeMillis() >= resetTimer) {
             world.checkShipCollisions(meteors);
             for (Meteor m : meteors) {
                 if (m.isOffScreen()) {
@@ -49,6 +48,7 @@ public class MeteorManager {
     }
 
     public void reset() {
+        pause = false;
         for (Meteor m : meteors) {
             m.reset();
         }

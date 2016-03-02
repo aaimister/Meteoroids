@@ -23,19 +23,15 @@ public class GameRenderer {
     private float gameHeight;
     private float midPointY;
 
-    public GameRenderer(GameWorld world) {
+    public GameRenderer(GameWorld world, OrthographicCamera cam, SpriteBatch batcher, ShapeRenderer shapeRenderer) {
         this.world = world;
+        this.cam = cam;
+        this.batcher = batcher;
+        this.shapeRenderer = shapeRenderer;
 
         gameWidth = world.getGameWidth();
         gameHeight = world.getGameHeight();
         midPointY = world.getMidPointY();
-
-        cam = new OrthographicCamera();
-        cam.setToOrtho(true, gameWidth, gameHeight);
-        batcher = new SpriteBatch();
-        batcher.setProjectionMatrix(cam.combined);
-        shapeRenderer = new ShapeRenderer();
-        shapeRenderer.setProjectionMatrix(cam.combined);
 
         font = AssetLoader.font;
         outline = AssetLoader.outline;
