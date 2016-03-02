@@ -20,7 +20,7 @@ public class GameScreen implements Screen {
         this.world = world;
         renderer = new GameRenderer(world, cam, batcher, shapeRenderer);
 
-        world.commenceShower();
+        world.reset();
     }
 
     @Override

@@ -84,7 +84,7 @@ public class GameWorld {
     }
 
     public void reset() {
-         tutorial = false;
+        tutorial = false;
         ship.reset();
         padManager.reset();
         meteorManager.reset();
@@ -121,13 +121,6 @@ public class GameWorld {
 
     public void toggleRetryText() {
         retry.toggle();
-    }
-
-    public void commenceShower() {
-        reset();
-//        tutorial = false;
-//        warning.reset();
-//        meteorManager.commenceShower();
     }
 
     public int getScore() {

@@ -29,6 +29,7 @@ public class TutorialScreen implements Screen {
     private ScreenText[] text;
     private String move;
     private Rectangle teleRec;
+    private Rectangle skipBox;
 
     private BitmapFont font;
     private BitmapFont outline;
@@ -58,6 +59,7 @@ public class TutorialScreen implements Screen {
         world = new GameWorld(tweenManager, gameWidth, gameHeight, midPointY);
         ship = world.getShip();
         teleRec = new Rectangle(0.0f, 0.0f, ship.getWidth(), ship.getHeight());
+        skipBox = new Rectangle(0.0f, 0.0f, gameWidth, 30.0f);
 
         cam = new OrthographicCamera();
         cam.setToOrtho(true, gameWidth, gameHeight);
@@ -104,6 +106,9 @@ public class TutorialScreen implements Screen {
             AssetLoader.setFontScale(0.4f);
             outline.draw(batcher, "Tutorial", 0, 10.0f, gameWidth, Align.center, false);
             font.draw(batcher, "Tutorial", 0, 10.0f, gameWidth, Align.center, false);
+            AssetLoader.setFontScale(0.2f);
+            outline.draw(batcher, "(PRESS TO SKIP)", 0, 20.0f, gameWidth, Align.center, false);
+            font.draw(batcher, "(PRESS TO SKIP)", 0, 20.0f, gameWidth, Align.center, false);
             AssetLoader.setFontScale(0.3f);
             outline.draw(batcher, move, 0, midPointY, gameWidth, Align.center, false);
             font.draw(batcher, move, 0, midPointY, gameWidth, Align.center, false);
@@ -170,6 +175,11 @@ public class TutorialScreen implements Screen {
     private void update(float delta) {
         world.update(delta);
         setup(step);
+
+        if (Gdx.input.justTouched() && skipBox.contains(Gdx.input.getX() / (Gdx.graphics.getWidth() / gameWidth), Gdx.input.getY() / (Gdx.graphics.getHeight() / gameHeight))) {
+            skip();
+        }
+
         if (step == 0) {
             // Test Movement
             if (!ship.isResetting()) {
@@ -265,13 +275,18 @@ public class TutorialScreen implements Screen {
                     text[11].hide();
                     done = true;
                 } else if (done && !text[11].showing()) {
-                    game.setScreen(new GameScreen(world, cam, batcher, shapeRenderer));
+                    skip();
                 }
             } else {
                 right = false;
             }
         }
         prevX = ship.getX();
+    }
+
+    private void skip() {
+        step = 5;
+        game.setScreen(new GameScreen(world, cam, batcher, shapeRenderer));
     }
 
     private void setup(int step) {
