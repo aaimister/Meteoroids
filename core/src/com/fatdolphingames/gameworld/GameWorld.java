@@ -1,6 +1,8 @@
 package com.fatdolphingames.gameworld;
 
 import aurelienribon.tweenengine.TweenManager;
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -45,10 +47,11 @@ public class GameWorld {
         score = new Score(this, 3.0f, gameHeight - 22.0f, 0, 0);
         menu = new Menu(this, -113.0f, 27.0f, 112, 180);
         warning = new Warning(this, gameWidth / 2.0f - 16, midPointY - 16, 32, 32);
+
+        Gdx.app.setLogLevel(Application.LOG_DEBUG);
     }
 
     public void update(float delta) {
-    //    System.out.println(tweenManager.getRunningTweensCount());
         if (!ship.isAlive() && ship.respawn() && !menu.isOpen() && !tutorial) {
             retry.show();
         }
@@ -71,12 +74,14 @@ public class GameWorld {
         }
     }
 
-    public void touchUp(float screenX, float screenY, int pointer, int dragCount) {
+    public void touchUp(float screenX, float screenY, int pointer) {
+        float leftRight = Math.abs(screenX - startX);
+        float upDown = Math.abs(screenY - startY);
         padManager.touchUp(screenX, screenY, pointer);
         if (ship.isAlive()) {
             ship.touchUp(screenX, screenY, pointer);
-        } else if (dragCount > 3 || menu.isOpen()) {
-            menu.touchUp(screenX, screenY, pointer);
+        } else if (leftRight >= 25.0f || upDown >= 25.0f || menu.isOpen()) {
+            menu.openMenu(screenX, screenY, startX, startY, leftRight, upDown);
         } else if (ship.respawn() && !tutorial) {
             retry.hide();
             reset();
@@ -119,24 +124,12 @@ public class GameWorld {
         retry.hide();
     }
 
-    public void toggleRetryText() {
-        retry.toggle();
-    }
-
     public int getScore() {
         return score.getScore();
     }
 
     public int getBestScore() {
         return score.getBestScore();
-    }
-
-    public float getStartX() {
-        return startX;
-    }
-
-    public float getStartY() {
-        return startY;
     }
 
     public boolean newBestScore() {

@@ -10,7 +10,6 @@ public class InputHandler implements InputProcessor {
 
     private GameWorld world;
 
-    private int dragCount;
     private int fingers;
 
     private float scaleX;
@@ -45,9 +44,9 @@ public class InputHandler implements InputProcessor {
     public boolean keyUp(int keycode) {
         fingers--;
         if (keycode == Keys.LEFT) {
-            world.touchUp(0, 0, fingers, 0);
+            world.touchUp(0, 0, fingers);
         } else if (keycode == Keys.RIGHT) {
-            world.touchUp(136, 0, fingers, 0);
+            world.touchUp(136, 0, fingers);
         }
 
         return false;
@@ -64,7 +63,6 @@ public class InputHandler implements InputProcessor {
         screenX = (int) (((float) screenX) / scaleX);
         screenY = (int) (((float) screenY) / scaleY);
         fingers++;
-        dragCount = 0;
         world.touchDown(screenX, screenY, fingers);
         return false;
     }
@@ -74,13 +72,13 @@ public class InputHandler implements InputProcessor {
         screenX = (int) (((float) screenX) / scaleX);
         screenY = (int) (((float) screenY) / scaleY);
         fingers = fingers - 1 >= 0 ? fingers - 1 : 0;
-        world.touchUp(screenX, screenY, fingers, dragCount);
+        world.touchUp(screenX, screenY, fingers);
         return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        dragCount++;
+        // Do nothing.
         return false;
     }
 

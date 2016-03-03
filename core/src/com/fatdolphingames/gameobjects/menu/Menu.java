@@ -62,14 +62,16 @@ public class Menu extends SpriteObject {
 
     @Override
     public void touchUp(float screenX, float screenY, int pointer) {
-        float leftRight = Math.abs(screenX - world.getStartX());
-        float upDown = Math.abs(screenY - world.getStartY());
-        if (leftRight >= 25.0f || upDown >= 25.f) {
+        // Do nothing.
+    }
+
+    public void openMenu(float screenX, float screenY, float startX, float startY, float leftRight, float upDown) {
+        if (leftRight >= 25.0f || upDown >= 25.0f) {
             int direction;
             if (leftRight > upDown) {
-                direction = screenX > world.getStartX() ? 0 : 2;
+                direction = screenX > startX ? 0 : 2;
             } else {
-                direction = screenY > world.getStartY() ? 1 : 3;
+                direction = screenY > startY ? 1 : 3;
             }
             swipeText.toggle();
             Vector2 start = open ? startPosition[direction < 2 ? direction + 2 : direction - 2] : startPosition[direction];
