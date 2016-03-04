@@ -12,6 +12,9 @@ import com.fatdolphingames.helpers.AssetLoader;
 
 public class GameWorld {
 
+    public static float scaleX;
+    public static float scaleY;
+
     private TweenManager tweenManager;
     private Ship ship;
     private PadManager padManager;
@@ -30,11 +33,13 @@ public class GameWorld {
     private float startX;
     private float startY;
 
-    public GameWorld(TweenManager tweenManager, float gameWidth, float gameHeight, float midPointY) {
+    public GameWorld(TweenManager tweenManager, float gameWidth, float gameHeight, float midPointY, float scaleX, float scaleY) {
         this.tweenManager = tweenManager;
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
         this.midPointY = midPointY;
+        this.scaleX = scaleX;
+        this.scaleY = scaleY;
 
         tutorial = true;
 
@@ -45,7 +50,7 @@ public class GameWorld {
         float stringHeight = AssetLoader.calculateFontHeight("Tap To Retry", 0.3f);
         retry = new ScreenText(this, 35, midPointY - (stringHeight / 2.0f), (int) AssetLoader.calculateFontWidth("Tap To Retry", 0.3f), (int) stringHeight, "Tap To Retry", 0.3f);
         score = new Score(this, 3.0f, gameHeight - 22.0f, 0, 0);
-        menu = new Menu(this, -113.0f, 27.0f, 112, 180);
+        menu = new Menu(this, -113.0f, 27.0f, 112, (int) (gameHeight - 54.0f));
         warning = new Warning(this, gameWidth / 2.0f - 16, midPointY - 16, 32, 32);
 
         Gdx.app.setLogLevel(Application.LOG_DEBUG);

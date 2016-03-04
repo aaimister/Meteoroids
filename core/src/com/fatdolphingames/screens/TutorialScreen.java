@@ -41,7 +41,6 @@ public class TutorialScreen implements Screen {
     private float gameWidth;
     private float gameHeight;
     private float midPointY;
-    private float textHeight;
     private float runTime;
     private float prevX;
 
@@ -53,22 +52,23 @@ public class TutorialScreen implements Screen {
         move = "";
 
         gameWidth = 136.0f;
-        gameHeight = ((float) Gdx.graphics.getHeight()) / (((float) Gdx.graphics.getWidth()) / gameWidth);
+        float scaleX = ((float) Gdx.graphics.getWidth()) / gameWidth;
+        gameHeight = ((float) Gdx.graphics.getHeight()) / scaleX;
         midPointY = gameHeight / 2.0f;
-
-        world = new GameWorld(tweenManager, gameWidth, gameHeight, midPointY);
-        ship = world.getShip();
-        teleRec = new Rectangle(0.0f, 0.0f, ship.getWidth(), ship.getHeight());
-        skipBox = new Rectangle(0.0f, 0.0f, gameWidth, 30.0f);
 
         cam = new OrthographicCamera();
         cam.setToOrtho(true, gameWidth, gameHeight);
+
+        world = new GameWorld(tweenManager, gameWidth, gameHeight, midPointY, scaleX, ((float) Gdx.graphics.getHeight()) / gameHeight);
+        ship = world.getShip();
+        teleRec = new Rectangle(0.0f, 0.0f, ship.getWidth(), ship.getHeight());
+        skipBox = new Rectangle(0.0f, 0.0f, gameWidth, 30.0f);
 
         outline = AssetLoader.outline;
         font = AssetLoader.font;
 
         setup = new int[5];
-        textHeight = AssetLoader.calculateFontHeight("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0.2f) * -1;
+        float textHeight = AssetLoader.calculateFontHeight("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0.2f) * -1;
         text = new ScreenText[] { new ScreenText(world, 0.0f, 0.0f, (int) AssetLoader.calculateFontWidth("TAP + HOLD", 0.2f), (int) textHeight, "TAP + HOLD", 0.2f),
                 new ScreenText(world, 0.0f, 0.0f, (int) AssetLoader.calculateFontWidth("TAP + HOLD", 0.2f), (int) textHeight, "TAP + HOLD", 0.2f),
                 new ScreenText(world, 0.0f, 0.0f, (int) AssetLoader.calculateFontWidth("TAP", 0.2f), (int) textHeight, "TAP", 0.2f),
