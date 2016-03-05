@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 import com.fatdolphingames.accessors.SpriteAccessor;
 import com.fatdolphingames.gameobjects.ScreenText;
 import com.fatdolphingames.gameobjects.SpriteObject;
@@ -38,9 +39,9 @@ public class Menu extends SpriteObject {
         endPosition = new Vector2(12.0f, 27.0f);
         startPosition = new Vector2[] { new Vector2(-width - 1, endPosition.y), new Vector2(endPosition.x, -height - 1), new Vector2(gameWidth + 1, endPosition.y), new Vector2(endPosition.x, gameHeight + 1) };
         swipeText = new ScreenText(world, 44.0f, 10.0f, 0, 0, "Swipe To Close", 0.20f);
-        buttons = new MenuButton[] { new AdButton(world, x, y, 12, 12, 20.0f, 132.0f / scaleY), new VolumeButton(world, x, y, 12, 12, 20.0f, 115.0f / scaleY),
-            new RexButton(world, x, y, 10, 10, 10.0f, 165.0f / scaleY), new MedalButton(world, x, y, 30, 30, 42.0f, 25.0f / scaleY),
-            new CharacterButton(world, x, y, 22, 22, 77.0f, 111.0f / scaleY), new ColorButton(world, x, y, 10, 10, 84.0f, 140.0f / scaleY) };
+        buttons = new MenuButton[] { new AdButton(world, x, y, 12, 12, 20.0f, 127.0f / scaleY), new VolumeButton(world, x, y, 12, 12, 20.0f, 110.0f / scaleY),
+            new RexButton(world, x, y, 10, 10, 10.0f, 165.0f / scaleY), new MedalButton(world, x, y, 30, 30, 42.0f, 23.2f / scaleY),
+            new CharacterButton(world, x, y, 22, 22, 77.0f, 108.3f / scaleY), new ColorButton(world, x, y, 10, 10, 83.0f, 137.3f / scaleY)};
     }
 
     @Override
@@ -128,43 +129,43 @@ public class Menu extends SpriteObject {
 
         batcher.begin();
         AssetLoader.setFontScale(0.2f);
-     //   outline.draw(batcher, medalButton.getText(), getX() + ((getWidth() - (medalButton.getText().length() * font.getSpaceWidth())) / 2.0f), getY() + 7.0f);
+        outline.draw(batcher, "Medal", getX(), getY() + 7.0f / scaleY, getWidth(), Align.center, false);
         font.setColor(AssetLoader.WHITE);
-        font.draw(batcher, "Medal", getX() + (getWidth() - AssetLoader.calculateFontWidth("Medal", 0.2f)) / 2.0f, (getY() + 7.0f) / scaleY);
+        font.draw(batcher, "Medal", getX(), getY() + 7.0f / scaleY, getWidth(), Align.center, false);
 
         AssetLoader.setFontScale(0.5f);
         batcher.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-        outline.draw(batcher, "Score", getX() + 5.0f, (getY() + 65.0f) / scaleY);
-        font.draw(batcher, "Score", getX() + 5.0f, (getY() + 65.0f) / scaleY);
-        outline.draw(batcher, "Best", getX() + 70.0f, (getY() + 65.0f) / scaleY);
-        font.draw(batcher, "Best", getX() + 70.0f, (getY() + 65.0f) / scaleY);
-        outline.draw(batcher, "" + world.getScore(), getX() + 5.0f, (getY() + 82.0f) / scaleY);
-        font.draw(batcher, "" + world.getScore(), getX() + 5.0f, (getY() + 82.0f) / scaleY);
+        outline.draw(batcher, "Score", getX() + 5.0f, getY() + 65.0f / scaleY);
+        font.draw(batcher, "Score", getX() + 5.0f, getY() + 65.0f / scaleY);
+        outline.draw(batcher, "Best", getX() + 70.0f, getY() + 65.0f / scaleY);
+        font.draw(batcher, "Best", getX() + 70.0f, getY() + 65.0f / scaleY);
+        outline.draw(batcher, "" + world.getScore(), getX() + 5.0f, getY() + 82.0f / scaleY);
+        font.draw(batcher, "" + world.getScore(), getX() + 5.0f, getY() + 82.0f / scaleY);
 
         if (world.newBestScore()) {
             AssetLoader.setFontScale(0.18f);
             font.setColor(AssetLoader.RED);
-            font.draw(batcher, "new!", getX() + 54.0f, (getY() + 87.0f) / scaleY);
+            font.draw(batcher, "new!", getX() + 54.0f, getY() + 87.0f / scaleY);
         }
 
         AssetLoader.setFontScale(0.5f);
-        outline.draw(batcher, "" + world.getBestScore(), getX() + 70.0f, (getY() + 82.0f) / scaleY);
+        outline.draw(batcher, "" + world.getBestScore(), getX() + 70.0f, getY() + 82.0f / scaleY);
         font.setColor(AssetLoader.WHITE);
-        font.draw(batcher, "" + world.getBestScore(), getX() + 70.0f, (getY() + 82.0f) / scaleY);
+        font.draw(batcher, "" + world.getBestScore(), getX() + 70.0f, getY() + 82.0f / scaleY);
 
 //        if (characterButton.isEnabled()) {
-//            AssetLoader.setFontScale(0.12f);
-//            outline.draw(batcher, characterButton.getText(), getX() + getWidth() - 24.0f - (characterButton.getText().length() / 2 * font.getSpaceWidth()), getY() + 105.0f - Math.abs(font.getCapHeight()));
-//            font.draw(batcher, characterButton.getText(), getX() + getWidth() - 24.0f - (characterButton.getText().length() / 2 * font.getSpaceWidth()), getY() + 105.0f - Math.abs(font.getCapHeight()));
+            AssetLoader.setFontScale(0.12f);
+            outline.draw(batcher, "Character Name Here", getX() + 75.0f, getY() + 101.7f / scaleY, 26.0f, Align.center, false);
+            font.draw(batcher, "Character Name Here", getX() + 75.0f, getY() + 101.7f / scaleY, 26.0f, Align.center, false);
 //        }
 
         batcher.setColor(Color.WHITE);
 
         AssetLoader.setFontScale(0.18f);
-        font.draw(batcher, "Also Try", getX() + 3.0f, (getY() + 157.0f) / scaleY);
-        font.draw(batcher, "Powered By", getX() + getWidth() - 38.0f, (getY() + 157.0f) / scaleY);
-        batcher.draw(AssetLoader.libGDX, getX() + getWidth() - 32.0f, (getY() + 165.0f) / scaleY, 0.0f, 0.0f, AssetLoader.libGDX.getRegionWidth(), AssetLoader.libGDX.getRegionHeight(), -0.2f, -0.2f, 180.0f);
-        batcher.draw(AssetLoader.java, getX() + getWidth() - 20.0f, (getY() + 165.0f) / scaleY, 0.0f, 0.0f, AssetLoader.java.getRegionWidth(), AssetLoader.java.getRegionHeight(), -0.2f, -0.2f, 180.0f);
+        font.draw(batcher, "Also Try", getX() + 3.0f, getY() + 157.0f / scaleY);
+        font.draw(batcher, "Powered By", getX() + getWidth() - 38.0f, getY() + 157.0f / scaleY);
+        batcher.draw(AssetLoader.libGDX, getX() + getWidth() - 32.0f, getY() + 165.0f / scaleY, 0.0f, 0.0f, AssetLoader.libGDX.getRegionWidth(), AssetLoader.libGDX.getRegionHeight(), -0.2f, -0.2f, 180.0f);
+        batcher.draw(AssetLoader.java, getX() + getWidth() - 20.0f, getY() + 165.0f / scaleY, 0.0f, 0.0f, AssetLoader.java.getRegionWidth(), AssetLoader.java.getRegionHeight(), -0.2f, -0.2f, 180.0f);
         batcher.end();
 
         for (MenuButton mb : buttons) {

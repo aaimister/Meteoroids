@@ -22,6 +22,7 @@ public abstract class MenuButton extends SpriteObject {
         if (start != null) {
             setPosition(start.x + offsetX, start.y + offsetY);
         }
+        tweenManager.killTarget(this);
         Tween.to(this, SpriteAccessor.POSITION, 0.5f).target(end.x + offsetX, end.y + offsetY).ease(TweenEquations.easeInOutQuad).start(tweenManager);
     }
 
