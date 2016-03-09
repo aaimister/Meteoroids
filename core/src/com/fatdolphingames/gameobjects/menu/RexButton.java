@@ -42,6 +42,11 @@ public class RexButton extends MenuButton {
     }
 
     @Override
+    public void save() {
+        // Do nothing.
+    }
+
+    @Override
     public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
         batcher.begin();
         batcher.draw(AssetLoader.tapRex, getX(), getY(), 0.0f, 0.0f, AssetLoader.tapRex.getRegionWidth(), AssetLoader.tapRex.getRegionHeight(), -0.2f, -0.2f, 180.0f);

@@ -12,12 +12,13 @@ public class Score extends SpriteObject {
     private boolean newBest;
     private boolean playSound;
 
-    private int bestScore;
+    private static int bestScore;
     private int score;
 
     public Score(GameWorld world, float x, float y, int width, int height) {
         super(world, x, y, width, height);
         playSound = true;
+        bestScore = AssetLoader.prefs.getInteger("bestScore");
     }
 
     @Override
@@ -68,6 +69,10 @@ public class Score extends SpriteObject {
 
     public int getBestScore() {
         return bestScore;
+    }
+
+    public static void save() {
+        AssetLoader.prefs.putInteger("bestScore", bestScore);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.fatdolphingames.helpers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,6 +9,8 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.fatdolphingames.gameobjects.Score;
+import com.fatdolphingames.gameobjects.menu.Menu;
 
 public class AssetLoader {
 
@@ -41,6 +44,8 @@ public class AssetLoader {
     public static Sound dodgeUp;
 
     public static float volume;
+
+    public static Preferences prefs;
 
     public static final Color BLACK = getColor(46.0f, 46.0f, 46.0f, 1.0f);
     public static final Color WHITE = getColor(251.0f, 244.0f, 238.0f, 1.0f);
@@ -101,6 +106,8 @@ public class AssetLoader {
         explosion = Gdx.audio.newSound(Gdx.files.internal("data/sounds/explosion.mp3"));
         dodgeDown = Gdx.audio.newSound(Gdx.files.internal("data/sounds/dodgedown.mp3"));
         dodgeUp = Gdx.audio.newSound(Gdx.files.internal("data/sounds/dodgeup.mp3"));
+
+        prefs = Gdx.app.getPreferences("Meteoroids");
     }
 
     public static TextureRegion ship() {
@@ -148,6 +155,12 @@ public class AssetLoader {
         for (TextureRegion tr : texture) {
             tr.flip(x, y);
         }
+    }
+
+    public static void save() {
+        Score.save();
+        Menu.save();
+        prefs.flush();
     }
 
     public static void dispose() {

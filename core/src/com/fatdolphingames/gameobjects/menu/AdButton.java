@@ -14,6 +14,7 @@ public class AdButton extends MenuButton {
 
     public AdButton(GameWorld world, float x, float y, int width, int height, float offsetX, float offsetY) {
         super(world, x, y, width, height, offsetX, offsetY);
+        on = AssetLoader.prefs.getBoolean("adsOnOff");
     }
 
     @Override
@@ -41,6 +42,11 @@ public class AdButton extends MenuButton {
     @Override
     public void collidedWith(SpriteObject so) {
         // Do nothing.
+    }
+
+    @Override
+    public void save() {
+        AssetLoader.prefs.putBoolean("adsOnOff", on);
     }
 
     @Override

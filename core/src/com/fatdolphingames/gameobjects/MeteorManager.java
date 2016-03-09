@@ -38,10 +38,11 @@ public class MeteorManager {
 
     public void update(float delta) {
         if (!pause && System.currentTimeMillis() >= resetTimer) {
-            world.checkShipCollisions(meteors);
             for (Meteor m : meteors) {
                 if (m.isOffScreen()) {
                     fireMeteor(m);
+                } else {
+                    world.checkShipCollisions(m);
                 }
             }
         }

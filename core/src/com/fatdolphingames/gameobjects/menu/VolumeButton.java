@@ -14,6 +14,9 @@ public class VolumeButton extends MenuButton {
 
     public VolumeButton(GameWorld world, float x, float y, int width, int height, float offsetX, float offsetY) {
         super(world, x, y, width, height, offsetX, offsetY);
+        on = AssetLoader.prefs.getBoolean("volumeOnOff");
+        if (!on)
+            AssetLoader.toggleVolume();
     }
 
     @Override
@@ -42,6 +45,11 @@ public class VolumeButton extends MenuButton {
     @Override
     public void collidedWith(SpriteObject so) {
         // Do nothing.
+    }
+
+    @Override
+    public void save() {
+        AssetLoader.prefs.putBoolean("volumeOnOff", on);
     }
 
     @Override

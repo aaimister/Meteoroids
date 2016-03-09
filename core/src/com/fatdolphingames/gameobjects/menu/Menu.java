@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.fatdolphingames.accessors.SpriteAccessor;
+import com.fatdolphingames.gameobjects.Score;
 import com.fatdolphingames.gameobjects.ScreenText;
 import com.fatdolphingames.gameobjects.SpriteObject;
 import com.fatdolphingames.gameworld.GameWorld;
@@ -23,7 +24,7 @@ public class Menu extends SpriteObject {
     private Vector2 endPosition;
 
     private ScreenText swipeText;
-    private MenuButton[] buttons;
+    private static MenuButton[] buttons;
 
     private boolean open;
 
@@ -102,6 +103,12 @@ public class Menu extends SpriteObject {
 
     public boolean isOpen() {
         return open;
+    }
+
+    public static void save() {
+        for (MenuButton mb : buttons) {
+            mb.save();
+        }
     }
 
     @Override

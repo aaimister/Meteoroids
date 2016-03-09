@@ -26,14 +26,6 @@ public abstract class MenuButton extends SpriteObject {
         Tween.to(this, SpriteAccessor.POSITION, 0.5f).target(end.x + offsetX, end.y + offsetY).ease(TweenEquations.easeInOutQuad).start(tweenManager);
     }
 
-//    @Override
-//    public float getX() {
-//        return super.getX() + offsetY;
-//    }
-//
-//    @Override
-//    public float getY() {
-//        return super.getY() + offsetY;
-//    }
+    public abstract void save();
 
 }

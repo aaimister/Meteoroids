@@ -41,6 +41,11 @@ public class ColorButton extends MenuButton {
     }
 
     @Override
+    public void save() {
+        // TODO Save current color.
+    }
+
+    @Override
     public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
         // TODO Draw currently selected color.
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);

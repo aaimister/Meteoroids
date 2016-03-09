@@ -41,6 +41,11 @@ public class MedalButton extends MenuButton {
     }
 
     @Override
+    public void save() {
+        // TODO Save current medal.
+    }
+
+    @Override
     public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
         // TODO Draw currently selected medal.
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);

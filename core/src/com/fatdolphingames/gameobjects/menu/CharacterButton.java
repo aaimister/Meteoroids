@@ -41,6 +41,11 @@ public class CharacterButton extends MenuButton {
     }
 
     @Override
+    public void save() {
+        // TODO Save current character.
+    }
+
+    @Override
     public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
         // TODO Draw currently selected charcter.
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fatdolphingames.gameworld.GameRenderer;
 import com.fatdolphingames.gameworld.GameWorld;
+import com.fatdolphingames.helpers.AssetLoader;
 
 public class GameScreen implements Screen {
 
@@ -42,7 +43,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-        // TODO save here
+        AssetLoader.save();
     }
 
     @Override

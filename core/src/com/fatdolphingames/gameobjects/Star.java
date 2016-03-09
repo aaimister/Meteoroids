@@ -34,6 +34,9 @@ public class Star extends SpriteObject {
     @Override
     public void update(float delta) {
         // Do nothing.
+        if (world.isPaused()) {
+            tweenManager.killTarget(this);
+        }
     }
 
     @Override
