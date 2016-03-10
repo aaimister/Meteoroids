@@ -43,7 +43,7 @@ public class Meteor extends SpriteObject {
     @Override
     public void reset() {
         tweenManager.killTarget(this);
-        setY(-getHeight());
+        setY(-getHeight() - 1);
         offScreen = true;
         duration = rand.nextInt(2) + 1 + rand.nextFloat();
         rotation = rand.nextInt(361);
