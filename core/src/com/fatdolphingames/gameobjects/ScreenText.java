@@ -5,7 +5,6 @@ import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fatdolphingames.accessors.SpriteAccessor;
@@ -87,16 +86,19 @@ public class ScreenText extends SpriteObject {
     }
 
     @Override
-    public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
+    public void drawBatcher(SpriteBatch batcher, float runTime) {
         if (show) {
             AssetLoader.setFontScale(getScaleX());
             Color c = AssetLoader.BLACK;
-            batcher.begin();
-            outline.setColor(c.r, c.g, c.b, getColor().a);
-            outline.draw(batcher, text, getX(), getY());
-            font.setColor(getColor());
-            font.draw(batcher, text, getX(), getY());
-            batcher.end();
+            AssetLoader.outline.setColor(c.r, c.g, c.b, getColor().a);
+            AssetLoader.outline.draw(batcher, text, getX(), getY());
+            AssetLoader.font.setColor(getColor());
+            AssetLoader.font.draw(batcher, text, getX(), getY());
         }
+    }
+
+    @Override
+    public void drawShapeRenderer(ShapeRenderer shapeRenderer, float runTime) {
+        // Do nothing.
     }
 }

@@ -53,10 +53,13 @@ public class VolumeButton extends MenuButton {
     }
 
     @Override
-    public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
-        batcher.begin();
+    public void drawBatcher(SpriteBatch batcher, float runTime) {
         batcher.setColor(Color.WHITE);
         batcher.draw(AssetLoader.sound[on ? 0 : 1], getX(), getY(), getWidth(), getHeight());
-        batcher.end();
+    }
+
+    @Override
+    public void drawShapeRenderer(ShapeRenderer shapeRenderer, float runTime) {
+        // Do nothing.
     }
 }

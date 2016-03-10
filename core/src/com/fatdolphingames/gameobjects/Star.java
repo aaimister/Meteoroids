@@ -1,8 +1,6 @@
 package com.fatdolphingames.gameobjects;
 
 import aurelienribon.tweenengine.*;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fatdolphingames.accessors.SpriteAccessor;
@@ -20,8 +18,6 @@ public class Star extends SpriteObject {
     private int size;
     private float gameWidth;
     private float gameHeight;
-    private float duration;
-    private float life;
 
     public Star(GameWorld world, float x, float y, int width, int height) {
         super(world, x, y, width, height);
@@ -34,9 +30,6 @@ public class Star extends SpriteObject {
     @Override
     public void update(float delta) {
         // Do nothing.
-        if (world.isPaused()) {
-            tweenManager.killTarget(this);
-        }
     }
 
     @Override
@@ -64,8 +57,8 @@ public class Star extends SpriteObject {
     private void randomize() {
         setAlpha(0.0f);
         setPosition(rand.nextInt((int) (gameWidth - getWidth() + 1)), rand.nextInt((int) (gameHeight - getHeight() - 25 + 1)));
-        life = rand.nextInt(11) + 4.0f;
-        duration = (gameHeight - getY()) / 7.0f + rand.nextFloat();
+        float life = rand.nextInt(11) + 4.0f;
+        float duration = (gameHeight - getY()) / 7.0f + rand.nextFloat();
         duration = duration - life < 0 ? 4.0f : duration - life;
         size = sizes[rand.nextInt(sizes.length)];
         Timeline.createParallel()
@@ -81,12 +74,13 @@ public class Star extends SpriteObject {
     }
 
     @Override
-    public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
-        batcher.begin();
-
+    public void drawBatcher(SpriteBatch batcher, float runTime) {
         batcher.setColor(1.0f, 1.0f, 1.0f, getColor().a);
         batcher.draw(AssetLoader.stars[size == 5 ? 0 : size == 3 ? 1 : 2], getX(), getY());
+    }
 
-        batcher.end();
+    @Override
+    public void drawShapeRenderer(ShapeRenderer shapeRenderer, float runTime) {
+        // Do nothing.
     }
 }

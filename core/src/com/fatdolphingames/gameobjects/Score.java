@@ -1,7 +1,6 @@
 package com.fatdolphingames.gameobjects;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fatdolphingames.gameworld.GameWorld;
@@ -76,17 +75,20 @@ public class Score extends SpriteObject {
     }
 
     @Override
-    public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
-        batcher.begin();
+    public void drawBatcher(SpriteBatch batcher, float runTime) {
         if (newBest) {
             batcher.setColor(Color.WHITE);
             batcher.draw(AssetLoader.crown, getX() - 1.5f, getY() - 6.0f);
         }
         AssetLoader.setFontScale(0.65f);
-        outline.setColor(AssetLoader.BLACK);
-        outline.draw(batcher, "" + score, getX(), getY());
-        font.setColor(AssetLoader.WHITE);
-        font.draw(batcher, "" + score, getX(), getY());
-        batcher.end();
+        AssetLoader.outline.setColor(AssetLoader.BLACK);
+        AssetLoader.outline.draw(batcher, "" + score, getX(), getY());
+        AssetLoader.font.setColor(AssetLoader.WHITE);
+        AssetLoader.font.draw(batcher, "" + score, getX(), getY());
+    }
+
+    @Override
+    public void drawShapeRenderer(ShapeRenderer shapeRenderer, float runTime) {
+        // Do nothing.
     }
 }

@@ -1,13 +1,9 @@
 package com.fatdolphingames.gameobjects;
 
 import aurelienribon.tweenengine.*;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Circle;
 import com.fatdolphingames.accessors.SpriteAccessor;
 import com.fatdolphingames.accessors.SpriteObjectAccessor;
 import com.fatdolphingames.gameworld.GameWorld;
@@ -18,7 +14,6 @@ import java.util.Random;
 public class Meteor extends SpriteObject {
 
     private Random rand;
-    private Circle hitBox;
 
     private boolean offScreen;
 
@@ -97,22 +92,13 @@ public class Meteor extends SpriteObject {
     }
 
     @Override
-    public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
-        batcher.begin();
+    public void drawBatcher(SpriteBatch batcher, float runTime) {
         batcher.setColor(Color.WHITE);
         batcher.draw(AssetLoader.meteoroids[size][textureType], getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
-       // batcher.draw(AssetLoader.meteoroids[0][0], getX(), getY());
-        batcher.end();
+    }
 
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(0.0f, 0.0f, 1.0f, 0.2f);
-        Circle cbounds = getBoundingCircle();
-    //    shapeRenderer.circle(cbounds.x, cbounds.y, cbounds.radius);
-        shapeRenderer.end();
-
-        Gdx.gl.glDisable(GL20.GL_BLEND);
+    @Override
+    public void drawShapeRenderer(ShapeRenderer shapeRenderer, float runTime) {
+        // Do nothing.
     }
 }

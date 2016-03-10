@@ -1,7 +1,6 @@
 package com.fatdolphingames.gameobjects.menu;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fatdolphingames.gameobjects.SpriteObject;
@@ -50,10 +49,13 @@ public class AdButton extends MenuButton {
     }
 
     @Override
-    public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
-        batcher.begin();
+    public void drawBatcher(SpriteBatch batcher, float runTime) {
         batcher.setColor(Color.WHITE);
         batcher.draw(AssetLoader.ads[on ? 0 : 1], getX(), getY(), getWidth(), getHeight());
-        batcher.end();
+    }
+
+    @Override
+    public void drawShapeRenderer(ShapeRenderer shapeRenderer, float runTime) {
+        // Do nothing.
     }
 }

@@ -1,8 +1,6 @@
 package com.fatdolphingames.gameobjects;
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fatdolphingames.gameworld.GameWorld;
 
 public class StarManager {
@@ -39,9 +37,9 @@ public class StarManager {
         }
     }
 
-    public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
+    public void drawBatcher(SpriteBatch batcher, float runTime) {
         for (Star s : stars) {
-            s.draw(batcher, shapeRenderer, font, outline, runTime);
+            s.drawBatcher(batcher, runTime);
         }
     }
 

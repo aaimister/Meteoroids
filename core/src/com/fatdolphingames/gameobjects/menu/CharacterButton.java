@@ -1,7 +1,6 @@
 package com.fatdolphingames.gameobjects.menu;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fatdolphingames.gameobjects.SpriteObject;
@@ -46,11 +45,13 @@ public class CharacterButton extends MenuButton {
     }
 
     @Override
-    public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
-        // TODO Draw currently selected charcter.
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+    public void drawBatcher(SpriteBatch batcher, float runTime) {
+        // Do nothing.
+    }
+
+    @Override
+    public void drawShapeRenderer(ShapeRenderer shapeRenderer, float runTime) {
         shapeRenderer.setColor(Color.BLUE);
         shapeRenderer.rect(getX(), getY(), getWidth(), getHeight());
-        shapeRenderer.end();
     }
 }

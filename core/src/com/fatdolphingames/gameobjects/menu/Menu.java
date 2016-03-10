@@ -2,17 +2,12 @@ package com.fatdolphingames.gameobjects.menu;
 
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.fatdolphingames.accessors.SpriteAccessor;
-import com.fatdolphingames.gameobjects.Score;
 import com.fatdolphingames.gameobjects.ScreenText;
 import com.fatdolphingames.gameobjects.SpriteObject;
 import com.fatdolphingames.gameworld.GameWorld;
@@ -112,13 +107,55 @@ public class Menu extends SpriteObject {
     }
 
     @Override
-    public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
-        swipeText.draw(batcher, shapeRenderer, font, outline, runTime);
+    public void drawBatcher(SpriteBatch batcher, float runTime) {
+        swipeText.drawBatcher(batcher, runTime);
 
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        AssetLoader.setFontScale(0.2f);
+        AssetLoader.outline.draw(batcher, "Medal", getX(), getY() + 7.0f / scaleY, getWidth(), Align.center, false);
+        AssetLoader.font.setColor(AssetLoader.WHITE);
+        AssetLoader.font.draw(batcher, "Medal", getX(), getY() + 7.0f / scaleY, getWidth(), Align.center, false);
 
-        shapeRenderer.begin(ShapeType.Filled);
+        AssetLoader.setFontScale(0.5f);
+        batcher.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+        AssetLoader.outline.draw(batcher, "Score", getX() + 5.0f, getY() + 65.0f / scaleY);
+        AssetLoader.font.draw(batcher, "Score", getX() + 5.0f, getY() + 65.0f / scaleY);
+        AssetLoader.outline.draw(batcher, "Best", getX() + 70.0f, getY() + 65.0f / scaleY);
+        AssetLoader.font.draw(batcher, "Best", getX() + 70.0f, getY() + 65.0f / scaleY);
+        AssetLoader.outline.draw(batcher, "" + world.getScore(), getX() + 5.0f, getY() + 82.0f / scaleY);
+        AssetLoader.font.draw(batcher, "" + world.getScore(), getX() + 5.0f, getY() + 82.0f / scaleY);
+
+        if (world.newBestScore()) {
+            AssetLoader.setFontScale(0.18f);
+            AssetLoader.font.setColor(AssetLoader.RED);
+            AssetLoader.font.draw(batcher, "new!", getX() + 54.0f, getY() + 87.0f / scaleY);
+        }
+
+        AssetLoader.setFontScale(0.5f);
+        AssetLoader.outline.draw(batcher, "" + world.getBestScore(), getX() + 70.0f, getY() + 82.0f / scaleY);
+        AssetLoader.font.setColor(AssetLoader.WHITE);
+        AssetLoader.font.draw(batcher, "" + world.getBestScore(), getX() + 70.0f, getY() + 82.0f / scaleY);
+
+//        if (characterButton.isEnabled()) {
+        AssetLoader.setFontScale(0.12f);
+        AssetLoader.outline.draw(batcher, "Character Name Here", getX() + 75.0f, getY() + 101.7f / scaleY, 26.0f, Align.center, false);
+        AssetLoader.font.draw(batcher, "Character Name Here", getX() + 75.0f, getY() + 101.7f / scaleY, 26.0f, Align.center, false);
+//        }
+
+        batcher.setColor(Color.WHITE);
+
+        AssetLoader.setFontScale(0.18f);
+        AssetLoader.font.draw(batcher, "Also Try", getX() + 3.0f, getY() + 157.0f / scaleY);
+        AssetLoader.font.draw(batcher, "Powered By", getX() + getWidth() - 38.0f, getY() + 157.0f / scaleY);
+        batcher.draw(AssetLoader.libGDX, getX() + getWidth() - 32.0f, getY() + 165.0f / scaleY, 0.0f, 0.0f, AssetLoader.libGDX.getRegionWidth(), AssetLoader.libGDX.getRegionHeight(), -0.2f, -0.2f, 180.0f);
+        batcher.draw(AssetLoader.java, getX() + getWidth() - 20.0f, getY() + 165.0f / scaleY, 0.0f, 0.0f, AssetLoader.java.getRegionWidth(), AssetLoader.java.getRegionHeight(), -0.2f, -0.2f, 180.0f);
+
+        for (MenuButton mb : buttons) {
+            mb.drawBatcher(batcher, runTime);
+        }
+    }
+
+    @Override
+    public void drawShapeRenderer(ShapeRenderer shapeRenderer, float runTime) {
         Color c = AssetLoader.BLACK;
         shapeRenderer.setColor(c.r, c.g, c.b, 0.8f);
         shapeRenderer.rect(getX() + 5.0f, getY() + 5.0f, getWidth() - 10.0f, getHeight() - 10.0f);
@@ -130,53 +167,9 @@ public class Menu extends SpriteObject {
         shapeRenderer.arc(getX() + 5.0f, getY() + getHeight() - 5.0f, 5.0f, 90.0f, 90.0f, 10);
         shapeRenderer.arc(getX() + getWidth() - 5.0f, getY() + getHeight() - 5.0f, 5.0f, 0.0f, 90.0f, 10);
         shapeRenderer.arc(getX() + getWidth() - 5.0f, getY() + 5.0f, 5.0f, 270.0f, 90.0f, 10);
-        shapeRenderer.end();
-
-        Gdx.gl.glDisable(GL20.GL_BLEND);
-
-        batcher.begin();
-        AssetLoader.setFontScale(0.2f);
-        outline.draw(batcher, "Medal", getX(), getY() + 7.0f / scaleY, getWidth(), Align.center, false);
-        font.setColor(AssetLoader.WHITE);
-        font.draw(batcher, "Medal", getX(), getY() + 7.0f / scaleY, getWidth(), Align.center, false);
-
-        AssetLoader.setFontScale(0.5f);
-        batcher.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-        outline.draw(batcher, "Score", getX() + 5.0f, getY() + 65.0f / scaleY);
-        font.draw(batcher, "Score", getX() + 5.0f, getY() + 65.0f / scaleY);
-        outline.draw(batcher, "Best", getX() + 70.0f, getY() + 65.0f / scaleY);
-        font.draw(batcher, "Best", getX() + 70.0f, getY() + 65.0f / scaleY);
-        outline.draw(batcher, "" + world.getScore(), getX() + 5.0f, getY() + 82.0f / scaleY);
-        font.draw(batcher, "" + world.getScore(), getX() + 5.0f, getY() + 82.0f / scaleY);
-
-        if (world.newBestScore()) {
-            AssetLoader.setFontScale(0.18f);
-            font.setColor(AssetLoader.RED);
-            font.draw(batcher, "new!", getX() + 54.0f, getY() + 87.0f / scaleY);
-        }
-
-        AssetLoader.setFontScale(0.5f);
-        outline.draw(batcher, "" + world.getBestScore(), getX() + 70.0f, getY() + 82.0f / scaleY);
-        font.setColor(AssetLoader.WHITE);
-        font.draw(batcher, "" + world.getBestScore(), getX() + 70.0f, getY() + 82.0f / scaleY);
-
-//        if (characterButton.isEnabled()) {
-            AssetLoader.setFontScale(0.12f);
-            outline.draw(batcher, "Character Name Here", getX() + 75.0f, getY() + 101.7f / scaleY, 26.0f, Align.center, false);
-            font.draw(batcher, "Character Name Here", getX() + 75.0f, getY() + 101.7f / scaleY, 26.0f, Align.center, false);
-//        }
-
-        batcher.setColor(Color.WHITE);
-
-        AssetLoader.setFontScale(0.18f);
-        font.draw(batcher, "Also Try", getX() + 3.0f, getY() + 157.0f / scaleY);
-        font.draw(batcher, "Powered By", getX() + getWidth() - 38.0f, getY() + 157.0f / scaleY);
-        batcher.draw(AssetLoader.libGDX, getX() + getWidth() - 32.0f, getY() + 165.0f / scaleY, 0.0f, 0.0f, AssetLoader.libGDX.getRegionWidth(), AssetLoader.libGDX.getRegionHeight(), -0.2f, -0.2f, 180.0f);
-        batcher.draw(AssetLoader.java, getX() + getWidth() - 20.0f, getY() + 165.0f / scaleY, 0.0f, 0.0f, AssetLoader.java.getRegionWidth(), AssetLoader.java.getRegionHeight(), -0.2f, -0.2f, 180.0f);
-        batcher.end();
 
         for (MenuButton mb : buttons) {
-            mb.draw(batcher, shapeRenderer, font, outline, runTime);
+            mb.drawShapeRenderer(shapeRenderer, runTime);
         }
     }
 }

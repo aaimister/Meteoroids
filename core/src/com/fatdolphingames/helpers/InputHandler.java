@@ -2,17 +2,21 @@ package com.fatdolphingames.helpers;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.fatdolphingames.gameworld.GameWorld;
 
 public class InputHandler implements InputProcessor {
 
     private GameWorld world;
 
+    private float scaleX;
+    private float scaleY;
+
     private int fingers;
 
-    public InputHandler(GameWorld world, OrthographicCamera cam) {
+    public InputHandler(GameWorld world, float scaleX, float scaleY) {
         this.world = world;
+        this.scaleX = scaleX;
+        this.scaleY = scaleY;
     }
 
     @Override
@@ -45,8 +49,8 @@ public class InputHandler implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        screenX = (int) (((float) screenX) / GameWorld.scaleX);
-        screenY = (int) (((float) screenY) / GameWorld.scaleY);
+        screenX = (int) (((float) screenX) / scaleX);
+        screenY = (int) (((float) screenY) / scaleY);
         fingers++;
         world.touchDown(screenX, screenY, fingers);
         return false;
@@ -54,8 +58,8 @@ public class InputHandler implements InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        screenX = (int) (((float) screenX) / GameWorld.scaleX);
-        screenY = (int) (((float) screenY) / GameWorld.scaleY);
+        screenX = (int) (((float) screenX) / scaleX);
+        screenY = (int) (((float) screenY) / scaleY);
         fingers = fingers - 1 >= 0 ? fingers - 1 : 0;
         world.touchUp(screenX, screenY, fingers);
         return false;

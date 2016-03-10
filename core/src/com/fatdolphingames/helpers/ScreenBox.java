@@ -1,9 +1,6 @@
 package com.fatdolphingames.helpers;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.fatdolphingames.gameobjects.Meteor;
 
@@ -16,8 +13,6 @@ public class ScreenBox {
     private Box[] boxes;
     private Meteor[] inColumn;
 
-    private float widthSpaceOffset;
-
     private int widthBoxCount;
     private int widthBoxSize;
     private int midPointY;
@@ -29,7 +24,7 @@ public class ScreenBox {
         midPointY = Math.round(gameHeight / 2);
         widthBoxCount = (int) Math.floor(gameWidth / boxSize);
         widthBoxSize = (int) Math.floor(gameWidth / widthBoxCount);
-        widthSpaceOffset = (gameWidth - (widthBoxSize * widthBoxCount)) / (widthBoxCount - 1);
+        float widthSpaceOffset = (gameWidth - (widthBoxSize * widthBoxCount)) / (widthBoxCount - 1);
 
         previousColumn = nextColumn = (widthBoxCount - 1) / 2;
         inColumn = new Meteor[widthBoxCount];
@@ -77,12 +72,6 @@ public class ScreenBox {
         return open;
     }
 
-    public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
-        for (Box b : boxes) {
-            b.draw(batcher, shapeRenderer, font, outline, runTime);
-        }
-    }
-
     private class Box {
 
         private Rectangle bounds;
@@ -115,24 +104,6 @@ public class ScreenBox {
 
         public boolean isClear() {
             return clear;
-        }
-
-        public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
-            // Debug Purposes
-//            Gdx.gl.glEnable(GL20.GL_BLEND);
-//            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-//
-//            shapeRenderer.begin(ShapeType.Filled);
-//            shapeRenderer.setColor(clear ? green : red);
-//            shapeRenderer.rect(x, y, width, height);
-//            shapeRenderer.end();
-//
-//            shapeRenderer.begin(ShapeType.Line);
-//            shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 0.2f);
-//            shapeRenderer.rect(x, y, width, height);
-//            shapeRenderer.end();
-//
-//            Gdx.gl.glDisable(GL20.GL_BLEND);
         }
 
     }

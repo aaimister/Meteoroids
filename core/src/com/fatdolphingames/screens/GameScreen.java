@@ -1,7 +1,6 @@
 package com.fatdolphingames.screens;
 
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fatdolphingames.gameworld.GameRenderer;
@@ -15,11 +14,11 @@ public class GameScreen implements Screen {
 
     private float runTime;
 
-    public GameScreen(GameWorld world, OrthographicCamera cam, SpriteBatch batcher, ShapeRenderer shapeRenderer) {
+    public GameScreen(GameWorld world, SpriteBatch batcher, ShapeRenderer shapeRenderer) {
         runTime = 5.0f;
 
         this.world = world;
-        renderer = new GameRenderer(world, cam, batcher, shapeRenderer);
+        renderer = new GameRenderer(world, batcher, shapeRenderer);
 
         world.reset();
     }

@@ -4,7 +4,6 @@ import aurelienribon.tweenengine.Timeline;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Timer;
@@ -16,7 +15,6 @@ public class ChargeBar {
 
     private ChargeSquare[] squares;
 
-    private Timer timer;
     private Timer.Task dodgeTask;
 
     private boolean dodging;
@@ -50,7 +48,6 @@ public class ChargeBar {
             new ChargeSquare(world, x + width * 4, y, width, height, squareChargeTime),
             new ChargeSquare(world, x + width * 5, y, width, height, squareChargeTime) };
 
-        timer = new Timer();
         dodgeTask = new Timer.Task() {
             @Override
             public void run() {
@@ -74,7 +71,7 @@ public class ChargeBar {
     public boolean dodge() {
         if (System.currentTimeMillis() >= rechargeTimer && System.currentTimeMillis() <= dodgeTimer) {
             dodging = true;
-            timer.schedule(dodgeTask, dodgeTime);
+            Timer.schedule(dodgeTask, dodgeTime);
             rechargeTimer = System.currentTimeMillis() + rechargeTime;
             for (int i = 0; i < squares.length; i++) {
                 squares[i].charge(i);
@@ -88,17 +85,12 @@ public class ChargeBar {
         return dodging;
     }
 
-    public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
-        batcher.begin();
-
+    public void drawBatcher(SpriteBatch batcher, float runTime) {
         batcher.setColor(Color.WHITE);
         batcher.draw(AssetLoader.chargeBar, x, y, width, height);
         for (ChargeSquare cs : squares) {
-            cs.draw(batcher, shapeRenderer, font, outline, runTime);
+            cs.drawBatcher(batcher, runTime);
         }
-
-        batcher.end();
-
     }
 
     private class ChargeSquare extends SpriteObject {
@@ -147,11 +139,16 @@ public class ChargeBar {
         }
 
         @Override
-        public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
+        public void drawBatcher(SpriteBatch batcher, float runTime) {
             batcher.setColor(getColor());
             batcher.draw(AssetLoader.chargeBarSquare[0], getX(), getY(), getWidth(), getHeight());
             batcher.setColor(1.0f, 1.0f, 1.0f, getColor().a);
             batcher.draw(AssetLoader.chargeBarSquare[1], getX(), getY(), getWidth(), getHeight());
+        }
+
+        @Override
+        public void drawShapeRenderer(ShapeRenderer shapeRenderer, float runTime) {
+            // Do nothing.
         }
     }
 }

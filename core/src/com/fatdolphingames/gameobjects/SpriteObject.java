@@ -35,7 +35,9 @@ public abstract class SpriteObject extends Sprite {
 
     public abstract void collidedWith(SpriteObject so);
 
-    public abstract void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime);
+    public abstract void drawBatcher(SpriteBatch batcher, float runTime);
+
+    public abstract void drawShapeRenderer(ShapeRenderer shapeRenderer, float runTime);
 
     public Circle getBoundingCircle() {
         if (bounds == null) {

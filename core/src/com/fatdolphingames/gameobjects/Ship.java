@@ -2,7 +2,6 @@ package com.fatdolphingames.gameobjects;
 
 import aurelienribon.tweenengine.*;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fatdolphingames.accessors.SpriteAccessor;
@@ -209,23 +208,24 @@ public class Ship extends SpriteObject {
         return !dead;
     }
 
-    public void drawChargeBar(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
-        chargeBar.draw(batcher, shapeRenderer, font, outline, runTime);
+    public void drawChargeBar(SpriteBatch batcher, float runTime) {
+        chargeBar.drawBatcher(batcher, runTime);
     }
 
     @Override
-    public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
+    public void drawBatcher(SpriteBatch batcher, float runTime) {
         if (!dead) {
-            batcher.begin();
             batcher.setColor(Color.WHITE);
             batcher.draw(AssetLoader.ship(), getX(), getY(), getWidth() / 2, getHeight() / 2, getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
             batcher.draw(AssetLoader.thrusters().getKeyFrame(runTime), getX(), getY() + (21.0f * getScaleY()), getWidth() / 2, getHeight() / 2, getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
-            batcher.end();
         } else {
-            batcher.begin();
             batcher.setColor(Color.WHITE);
             batcher.draw(AssetLoader.explosion().getKeyFrame(runTime), getX(), getY());
-            batcher.end();
         }
+    }
+
+    @Override
+    public void drawShapeRenderer(ShapeRenderer shapeRenderer, float runTime) {
+        // Do nothing.
     }
 }

@@ -16,10 +16,6 @@ public class ShipPool {
     public static Animation thrusterAnimation;
     public static Animation explosionAnimation;
 
-    public ShipPool() {
-        start();
-    }
-
     public static void start() {
         shipPool = new Texture(Gdx.files.internal("data/shippool.png"));
         shipPool.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);

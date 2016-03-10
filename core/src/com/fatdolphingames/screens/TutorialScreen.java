@@ -59,7 +59,7 @@ public class TutorialScreen implements Screen {
         cam = new OrthographicCamera();
         cam.setToOrtho(true, gameWidth, gameHeight);
 
-        world = new GameWorld(tweenManager, gameWidth, gameHeight, midPointY, scaleX, ((float) Gdx.graphics.getHeight()) / gameHeight);
+        world = new GameWorld(tweenManager, gameWidth, gameHeight, midPointY);
         ship = world.getShip();
         teleRec = new Rectangle(0.0f, 0.0f, ship.getWidth(), ship.getHeight());
         skipBox = new Rectangle(0.0f, 0.0f, gameWidth, 30.0f);
@@ -87,7 +87,7 @@ public class TutorialScreen implements Screen {
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(cam.combined);
 
-        Gdx.input.setInputProcessor(new InputHandler(world, cam));
+        Gdx.input.setInputProcessor(new InputHandler(world, scaleX, ((float) Gdx.graphics.getHeight()) / gameHeight));
     }
 
     @Override
@@ -98,10 +98,10 @@ public class TutorialScreen implements Screen {
         runTime += delta;
         update(delta);
 
-        world.draw(batcher, shapeRenderer, font, outline, runTime);
+        batcher.begin();
+        world.drawBatcher(batcher, runTime);
 
         if (!done && !world.isMenuOpen()) {
-            batcher.begin();
             batcher.setColor(AssetLoader.WHITE);
             AssetLoader.setFontScale(0.4f);
             outline.draw(batcher, "Tutorial", 0, 10.0f, gameWidth, Align.center, false);
@@ -112,34 +112,35 @@ public class TutorialScreen implements Screen {
             AssetLoader.setFontScale(0.3f);
             outline.draw(batcher, move, 0, midPointY, gameWidth, Align.center, false);
             font.draw(batcher, move, 0, midPointY, gameWidth, Align.center, false);
-            batcher.end();
         }
 
-        text[0].draw(batcher, shapeRenderer, font, outline, runTime);
-        text[1].draw(batcher, shapeRenderer, font, outline, runTime);
-        text[2].draw(batcher, shapeRenderer, font, outline, runTime);
-        text[3].draw(batcher, shapeRenderer, font, outline, runTime);
-        text[4].draw(batcher, shapeRenderer, font, outline, runTime);
-        text[5].draw(batcher, shapeRenderer, font, outline, runTime);
-        text[6].draw(batcher, shapeRenderer, font, outline, runTime);
-        text[7].draw(batcher, shapeRenderer, font, outline, runTime);
-        text[8].draw(batcher, shapeRenderer, font, outline, runTime);
-        text[9].draw(batcher, shapeRenderer, font, outline, runTime);
-        text[10].draw(batcher, shapeRenderer, font, outline, runTime);
-        text[11].draw(batcher, shapeRenderer, font, outline, runTime);
+        text[0].drawBatcher(batcher, runTime);
+        text[1].drawBatcher(batcher, runTime);
+        text[2].drawBatcher(batcher, runTime);
+        text[3].drawBatcher(batcher, runTime);
+        text[4].drawBatcher(batcher, runTime);
+        text[5].drawBatcher(batcher, runTime);
+        text[6].drawBatcher(batcher, runTime);
+        text[7].drawBatcher(batcher, runTime);
+        text[8].drawBatcher(batcher, runTime);
+        text[9].drawBatcher(batcher, runTime);
+        text[10].drawBatcher(batcher, runTime);
+        text[11].drawBatcher(batcher, runTime);
+        batcher.end();
 
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        world.drawShapeRenderer(shapeRenderer, runTime);
         if (step == 3) {
-            Gdx.gl.glEnable(GL20.GL_BLEND);
-            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             Color c = !left ? ship.getX() == gameWidth - ship.getWidth() ? AssetLoader.GREEN : AssetLoader.RED : ship.getX() == 0 ? AssetLoader.GREEN : AssetLoader.RED;
             shapeRenderer.setColor(c.r, c.g, c.b, 0.3f);
             shapeRenderer.rect(teleRec.x, teleRec.y, teleRec.width, teleRec.height);
-            shapeRenderer.end();
-
-            Gdx.gl.glDisable(GL20.GL_BLEND);
         }
+        shapeRenderer.end();
+
+        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
     @Override
@@ -215,7 +216,7 @@ public class TutorialScreen implements Screen {
             }
         } else if (step == 2) {
             // Test SideRoll
-            move = left ? "SideRoll Right" : "SideRoll Left";
+            move = left ? "Zooom Right" : "Zoom Left";
             if (!left) {
                 text[5].show();
                 if (ship.isSideRoll() && prevX > ship.getX()) {
@@ -286,7 +287,7 @@ public class TutorialScreen implements Screen {
 
     private void skip() {
         step = 5;
-        game.setScreen(new GameScreen(world, cam, batcher, shapeRenderer));
+        game.setScreen(new GameScreen(world, batcher, shapeRenderer));
     }
 
     private void setup(int step) {

@@ -1,8 +1,6 @@
 package com.fatdolphingames.gameobjects;
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fatdolphingames.gameworld.GameWorld;
 import com.fatdolphingames.helpers.ScreenBox;
 
@@ -17,13 +15,10 @@ public class MeteorManager {
     private long resetTimer;
     private long resetTime;
 
-    private float gameWidth;
-
     public MeteorManager(GameWorld world, int meteorCount) {
         this.world = world;
         meteors = new Meteor[meteorCount];
-        gameWidth = world.getGameWidth();
-        screenBox = new ScreenBox(gameWidth, world.getGameHeight(), 28);
+        screenBox = new ScreenBox(world.getGameWidth(), world.getGameHeight(), 28);
 
         for (int i = 0; i < meteorCount; i++) {
             int size = i % 3 == 0 ? 28 : i % 3 == 1 ? 20 : 8;
@@ -63,10 +58,9 @@ public class MeteorManager {
         }
     }
 
-    public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
-        screenBox.draw(batcher, shapeRenderer, font, outline, runTime);
+    public void drawBatcher(SpriteBatch batcher, float runTime) {
         for (Meteor m : meteors) {
-            m.draw(batcher, shapeRenderer, font, outline, runTime);
+            m.drawBatcher(batcher, runTime);
         }
     }
 

@@ -2,16 +2,11 @@ package com.fatdolphingames.gameobjects;
 
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.fatdolphingames.accessors.SpriteAccessor;
 import com.fatdolphingames.gameworld.GameWorld;
-import com.fatdolphingames.helpers.AssetLoader;
 
 public class Pad extends SpriteObject {
 
@@ -67,12 +62,13 @@ public class Pad extends SpriteObject {
     }
 
     @Override
-    public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
-        if (draw) {
-            Gdx.gl.glEnable(GL20.GL_BLEND);
-            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+    public void drawBatcher(SpriteBatch batcher, float runTime) {
+        // Do nothing.
+    }
 
-            shapeRenderer.begin(ShapeType.Filled);
+    @Override
+    public void drawShapeRenderer(ShapeRenderer shapeRenderer, float runTime) {
+        if (draw) {
             if (left) {
                 // Left Button
                 shapeRenderer.setColor(getColor());
@@ -88,9 +84,6 @@ public class Pad extends SpriteObject {
                 shapeRenderer.arc(getX(), getY() + getHeight() - (getHeight() * 0.1f), getWidth() * 0.2f, 90.0f, 90.0f);
                 shapeRenderer.rect(getX() - (getWidth() * 0.2f), getY() + (getHeight() * 0.1f), getWidth() * 0.2f, 80.0f);
             }
-            shapeRenderer.end();
-
-            Gdx.gl.glDisable(GL20.GL_BLEND);
         }
     }
 }

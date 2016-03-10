@@ -53,7 +53,7 @@ public class AssetLoader {
     public static final Color GREEN = getColor(76.0f, 166.0f, 45.0f, 1.0f);
 
     public static void start() {
-        shipPool = new ShipPool();
+        shipPool.start();
         layout = new GlyphLayout();
 
         volume = 1.0f;

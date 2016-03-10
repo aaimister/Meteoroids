@@ -61,10 +61,13 @@ public class Warning extends SpriteObject {
     }
 
     @Override
-    public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, BitmapFont font, BitmapFont outline, float runTime) {
-        batcher.begin();
+    public void drawBatcher(SpriteBatch batcher, float runTime) {
         batcher.setColor(1.0f, 1.0f, 1.0f, getColor().a);
         batcher.draw(AssetLoader.warning, getX(), getY());
-        batcher.end();
+    }
+
+    @Override
+    public void drawShapeRenderer(ShapeRenderer shapeRenderer, float runTime) {
+        // Do nothing.
     }
 }
