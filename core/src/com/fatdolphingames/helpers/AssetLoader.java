@@ -14,7 +14,6 @@ import com.fatdolphingames.gameobjects.menu.Menu;
 
 public class AssetLoader {
 
-    private static ShipPool shipPool;
     private static GlyphLayout layout;
 
     public static Texture dolphin;
@@ -53,7 +52,8 @@ public class AssetLoader {
     public static final Color GREEN = getColor(76.0f, 166.0f, 45.0f, 1.0f);
 
     public static void start() {
-        shipPool.start();
+        ShipPool.start();
+        ColorPool.start();
         layout = new GlyphLayout();
 
         volume = 1.0f;
@@ -110,18 +110,6 @@ public class AssetLoader {
         prefs = Gdx.app.getPreferences("Meteoroids");
     }
 
-    public static TextureRegion ship() {
-        return shipPool.ship;
-    }
-
-    public static Animation thrusters() {
-        return shipPool.thrusterAnimation;
-    }
-
-    public static Animation explosion() {
-        return shipPool.explosionAnimation;
-    }
-
     public static float calculateFontWidth(String text, float scaleX) {
         if (font.getScaleX() != scaleX) {
             setFontScale(scaleX);
@@ -164,7 +152,8 @@ public class AssetLoader {
     }
 
     public static void dispose() {
-        shipPool.dispose();
+        ShipPool.dispose();
+        ColorPool.dispose();
         dolphin.dispose();
         for (Texture t : loadingScreen)
             t.dispose();

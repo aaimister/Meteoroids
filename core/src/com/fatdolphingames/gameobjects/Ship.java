@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fatdolphingames.accessors.SpriteAccessor;
 import com.fatdolphingames.gameworld.GameWorld;
 import com.fatdolphingames.helpers.AssetLoader;
+import com.fatdolphingames.helpers.ShipPool;
 
 public class Ship extends SpriteObject {
 
@@ -167,7 +168,7 @@ public class Ship extends SpriteObject {
                 .start(tweenManager);
     }
 
-    public void stopMovement() {
+    private void stopMovement() {
         if (!teleporting) {
             tweenManager.killTarget(this, SpriteAccessor.POSITION);
         }
@@ -199,7 +200,7 @@ public class Ship extends SpriteObject {
             dead = true;
             stopMovement();
             deathTimer = System.currentTimeMillis() + 1000;
-            AssetLoader.explosion().play();
+            ShipPool.explosionAnimation.play();
             AssetLoader.explosion.play(AssetLoader.volume);
         }
     }
@@ -216,11 +217,11 @@ public class Ship extends SpriteObject {
     public void drawBatcher(SpriteBatch batcher, float runTime) {
         if (!dead) {
             batcher.setColor(Color.WHITE);
-            batcher.draw(AssetLoader.ship(), getX(), getY(), getWidth() / 2, getHeight() / 2, getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
-            batcher.draw(AssetLoader.thrusters().getKeyFrame(runTime), getX(), getY() + (21.0f * getScaleY()), getWidth() / 2, getHeight() / 2, getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+            batcher.draw(ShipPool.ship, getX(), getY(), getWidth() / 2, getHeight() / 2, getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+            batcher.draw(ShipPool.thrusterAnimation.getKeyFrame(runTime), getX(), getY() + (21.0f * getScaleY()), getWidth() / 2, getHeight() / 2, getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
         } else {
             batcher.setColor(Color.WHITE);
-            batcher.draw(AssetLoader.explosion().getKeyFrame(runTime), getX(), getY());
+            batcher.draw(ShipPool.explosionAnimation.getKeyFrame(runTime), getX(), getY());
         }
     }
 

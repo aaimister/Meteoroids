@@ -110,12 +110,14 @@ public class GameWorld {
         retry.drawBatcher(batcher, runTime);
         score.drawBatcher(batcher, runTime);
         warning.drawBatcher(batcher, runTime);
-        menu.drawBatcher(batcher, runTime);
     }
 
     public void drawShapeRenderer(ShapeRenderer shapeRenderer, float runTime) {
         padManager.drawShapeRenderer(shapeRenderer, runTime);
-        menu.drawShapeRenderer(shapeRenderer, runTime);
+    }
+
+    public void drawMenu(SpriteBatch batcher, ShapeRenderer shapeRenderer, float runTime) {
+        menu.draw(batcher, shapeRenderer, runTime);
     }
 
     public void addScore() {

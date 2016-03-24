@@ -2,7 +2,9 @@ package com.fatdolphingames.gameobjects.menu;
 
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -104,6 +106,20 @@ public class Menu extends SpriteObject {
         for (MenuButton mb : buttons) {
             mb.save();
         }
+    }
+
+    public void draw(SpriteBatch batcher, ShapeRenderer shapeRenderer, float runTime) {
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        drawShapeRenderer(shapeRenderer, runTime);
+        shapeRenderer.end();
+
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+
+        batcher.begin();
+        drawBatcher(batcher, runTime);
+        batcher.end();
     }
 
     @Override

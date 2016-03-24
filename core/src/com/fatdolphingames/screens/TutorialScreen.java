@@ -98,6 +98,15 @@ public class TutorialScreen implements Screen {
         runTime += delta;
         update(delta);
 
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        world.drawShapeRenderer(shapeRenderer, runTime);
+        shapeRenderer.end();
+
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+
         batcher.begin();
         world.drawBatcher(batcher, runTime);
 
@@ -128,19 +137,20 @@ public class TutorialScreen implements Screen {
         text[11].drawBatcher(batcher, runTime);
         batcher.end();
 
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        world.drawShapeRenderer(shapeRenderer, runTime);
         if (step == 3) {
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             Color c = !left ? ship.getX() == gameWidth - ship.getWidth() ? AssetLoader.GREEN : AssetLoader.RED : ship.getX() == 0 ? AssetLoader.GREEN : AssetLoader.RED;
             shapeRenderer.setColor(c.r, c.g, c.b, 0.3f);
             shapeRenderer.rect(teleRec.x, teleRec.y, teleRec.width, teleRec.height);
-        }
-        shapeRenderer.end();
+            shapeRenderer.end();
 
-        Gdx.gl.glDisable(GL20.GL_BLEND);
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+        }
+
+        world.drawMenu(batcher, shapeRenderer, runTime);
     }
 
     @Override

@@ -34,5 +34,7 @@ public class GameRenderer {
         batcher.begin();
         world.drawBatcher(batcher, runTime);
         batcher.end();
+
+        world.drawMenu(batcher, shapeRenderer, runTime);
     }
 }

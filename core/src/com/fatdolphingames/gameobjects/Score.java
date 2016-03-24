@@ -49,6 +49,7 @@ public class Score extends SpriteObject {
 
     public void addScore() {
         score++;
+        AssetLoader.scoreCount.play(AssetLoader.volume);
         if ((newBest = score > bestScore)) {
             bestScore = score;
             if (playSound) {
