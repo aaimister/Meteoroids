@@ -35,25 +35,25 @@ public class LoadScreen implements Screen {
         meteoroids.setPosition((width / 2.0f) - (meteoroids.getWidth() / 2.0f), (height / 2.0f) - (meteoroids.getHeight() / 2.0f));
 
         meteor01 = new Sprite(AssetLoader.loadingScreen[1]);
-        meteor01.setColor(AssetLoader.getColor(45.0f, 45.0f, 45.0f, 1.0f));
+        meteor01.setColor(AssetLoader.BLACK);
         meteor01.setScale(scale, scale);
         meteorY = (height / 2.0f) - (meteor01.getHeight() / 2.0f) - (9 * scale);
         meteor01.setPosition((width / 2.0f) - (meteor01.getWidth() / 2.0f) - (14 * scale), height + meteor01.getHeight());
 
         o01 = new Sprite(AssetLoader.loadingScreen[2]);
-        o01.setColor(AssetLoader.getColor(45.0f, 45.0f, 45.0f, 1.0f));
+        o01.setColor(AssetLoader.BLACK);
         o01.setAlpha(0.0f);
         o01.setScale(scale, scale);
         oY = (height / 2.0f) - (o01.getHeight() / 2.0f) - (9 * scale);
         o01.setPosition((width / 2.0f) - (o01.getWidth() / 2.0f) - (13 * scale), oY);
 
         meteor02 = new Sprite(AssetLoader.loadingScreen[1]);
-        meteor02.setColor(AssetLoader.getColor(45.0f, 45.0f, 45.0f, 1.0f));
+        meteor02.setColor(AssetLoader.BLACK);
         meteor02.setScale(scale, scale);
         meteor02.setPosition((width / 2.0f) - (meteor02.getWidth() / 2.0f) + (88 * scale), height + meteor02.getHeight());
 
         o02 = new Sprite(AssetLoader.loadingScreen[2]);
-        o02.setColor(AssetLoader.getColor(45.0f, 45.0f, 45.0f, 1.0f));
+        o02.setColor(AssetLoader.BLACK);
         o02.setAlpha(0.0f);
         o02.setScale(scale, scale);
         o02.setPosition((width / 2.0f) - (o01.getWidth() / 2.0f) + (87 * scale), oY);

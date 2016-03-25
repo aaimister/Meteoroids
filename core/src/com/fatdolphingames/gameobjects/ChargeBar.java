@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.fatdolphingames.accessors.SpriteAccessor;
 import com.fatdolphingames.gameworld.GameWorld;
 import com.fatdolphingames.helpers.AssetLoader;
+import com.fatdolphingames.helpers.ColorPool;
 
 public class ChargeBar {
 
@@ -100,7 +101,7 @@ public class ChargeBar {
         public ChargeSquare(GameWorld world, float x, float y, int width, int height, float rechargeTime) {
             super(world, x, y, width, height);
             this.rechargeTime = rechargeTime;
-            setColor(AssetLoader.getColor(166.0f, 45.0f, 48.0f, 0.0f));
+            setColor(ColorPool.getColor(166.0f, 45.0f, 48.0f, 0.0f));
         }
 
         @Override

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fatdolphingames.gameobjects.SpriteObject;
 import com.fatdolphingames.gameworld.GameWorld;
+import com.fatdolphingames.helpers.ColorPool;
 
 public class ColorButton extends MenuButton {
 
@@ -51,7 +52,7 @@ public class ColorButton extends MenuButton {
 
     @Override
     public void drawShapeRenderer(ShapeRenderer shapeRenderer, float runTime) {
-        shapeRenderer.setColor(Color.BLUE);
+        shapeRenderer.setColor(ColorPool.getColor());
         shapeRenderer.rect(getX(), getY(), getWidth(), getHeight());
     }
 }

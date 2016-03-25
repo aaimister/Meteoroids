@@ -46,14 +46,12 @@ public class AssetLoader {
 
     public static Preferences prefs;
 
-    public static final Color BLACK = getColor(46.0f, 46.0f, 46.0f, 1.0f);
-    public static final Color WHITE = getColor(251.0f, 244.0f, 238.0f, 1.0f);
-    public static final Color RED = getColor(166.0f, 45.0f, 48.0f, 1.0f);
-    public static final Color GREEN = getColor(76.0f, 166.0f, 45.0f, 1.0f);
+    public static final Color BLACK = ColorPool.getColor(46.0f, 46.0f, 46.0f, 1.0f);
+    public static final Color WHITE = ColorPool.getColor(251.0f, 244.0f, 238.0f, 1.0f);
+    public static final Color RED = ColorPool.getColor(166.0f, 45.0f, 48.0f, 1.0f);
+    public static final Color GREEN = ColorPool.getColor(76.0f, 166.0f, 45.0f, 1.0f);
 
     public static void start() {
-        ShipPool.start();
-        ColorPool.start();
         layout = new GlyphLayout();
 
         volume = 1.0f;
@@ -108,6 +106,8 @@ public class AssetLoader {
         dodgeUp = Gdx.audio.newSound(Gdx.files.internal("data/sounds/dodgeup.mp3"));
 
         prefs = Gdx.app.getPreferences("Meteoroids");
+        ShipPool.start();
+        ColorPool.start();
     }
 
     public static float calculateFontWidth(String text, float scaleX) {
@@ -135,10 +135,6 @@ public class AssetLoader {
         volume = volume == 1.0f ? 0.0f : 1.0f;
     }
 
-    public static Color getColor(float r, float g, float b, float a) {
-        return new Color(r / 255.0f, g / 255.0f, b / 255.0f, a);
-    }
-
     public static void flip(TextureRegion[] texture, boolean x, boolean y) {
         for (TextureRegion tr : texture) {
             tr.flip(x, y);
@@ -148,12 +144,13 @@ public class AssetLoader {
     public static void save() {
         Score.save();
         Menu.save();
+        ShipPool.save();
+        ColorPool.save();
         prefs.flush();
     }
 
     public static void dispose() {
         ShipPool.dispose();
-        ColorPool.dispose();
         dolphin.dispose();
         for (Texture t : loadingScreen)
             t.dispose();

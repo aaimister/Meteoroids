@@ -1,12 +1,12 @@
 package com.fatdolphingames.gameobjects;
 
 import aurelienribon.tweenengine.*;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fatdolphingames.accessors.SpriteAccessor;
 import com.fatdolphingames.gameworld.GameWorld;
 import com.fatdolphingames.helpers.AssetLoader;
+import com.fatdolphingames.helpers.ColorPool;
 import com.fatdolphingames.helpers.ShipPool;
 
 public class Ship extends SpriteObject {
@@ -216,11 +216,11 @@ public class Ship extends SpriteObject {
     @Override
     public void drawBatcher(SpriteBatch batcher, float runTime) {
         if (!dead) {
-            batcher.setColor(Color.WHITE);
+            batcher.setColor(ColorPool.getColor());
             batcher.draw(ShipPool.ship, getX(), getY(), getWidth() / 2, getHeight() / 2, getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
             batcher.draw(ShipPool.thrusterAnimation.getKeyFrame(runTime), getX(), getY() + (21.0f * getScaleY()), getWidth() / 2, getHeight() / 2, getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
         } else {
-            batcher.setColor(Color.WHITE);
+            batcher.setColor(ColorPool.getColor());
             batcher.draw(ShipPool.explosionAnimation.getKeyFrame(runTime), getX(), getY());
         }
     }

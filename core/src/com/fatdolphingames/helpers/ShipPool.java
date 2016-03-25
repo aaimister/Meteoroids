@@ -37,6 +37,10 @@ public class ShipPool {
         explosionAnimation.setPlayMode(Animation.PlayMode.NORMAL);
     }
 
+    public static void save() {
+
+    }
+
     public static void dispose() {
         shipPool.dispose();
     }
